@@ -33,9 +33,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.flogger.LoggerConfig;
 import com.google.common.testing.TestLogHandler;
+import dagger.Lazy;
 import google.registry.gcs.GcsUtils;
 import google.registry.gcs.backport.LocalStorageHelper;
 import google.registry.testing.AppEngineExtension;
+import google.registry.testing.Lazies;
 import java.io.IOException;
 import java.util.logging.LogRecord;
 import org.joda.time.DateTime;
@@ -60,7 +62,7 @@ public class GcsDiffFileListerTest {
   @BeforeEach
   void beforeEach() throws Exception {
     diffLister.gcsUtils = gcsUtils;
-    diffLister.executor = newDirectExecutorService();
+    diffLister.executor = Lazies.of(newDirectExecutorService());
     for (int i = 0; i < 5; i++) {
       addGcsFile(i, i + 1);
     }
