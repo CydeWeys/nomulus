@@ -49,6 +49,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Ordering;
+import google.registry.config.RegistryConfig;
+import google.registry.config.RegistryConfigSettings;
 import google.registry.flows.EppException;
 import google.registry.flows.FlowUtils.GenericXmlSyntaxErrorException;
 import google.registry.flows.FlowUtils.NotLoggedInException;
@@ -95,6 +97,7 @@ import google.registry.model.tld.Tld.TldState;
 import google.registry.model.tld.label.ReservedList;
 import google.registry.testing.DatabaseHelper;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import org.joda.money.Money;
@@ -2445,6 +2448,47 @@ class DomainCheckFlowTest extends ResourceCheckFlowTestCase<DomainCheckFlow, Dom
             .build());
     setEppInputXml(inputXml);
     runFlowAssertResponse(outputXml);
+  }
+
+  @Test
+  void testFeeExtension_xapLabel_std_v1() throws Exception {
+    createTld("tld");
+    persistResource(
+        Tld.get("tld")
+            .asBuilder()
+            .setExpiryAccessPeriodTransitions(
+                ImmutableSortedMap.of(START_INSTANT, Tld.ExpiryAccessPeriodMode.ENABLED))
+            .build());
+
+    RegistryConfigSettings settings = RegistryConfig.CONFIG_SETTINGS.get();
+    BigDecimal originalInitialFee =
+        settings.registryPolicy.domainExpiryAccessPeriod.initialFee.get("USD");
+    BigDecimal originalFinalFee =
+        settings.registryPolicy.domainExpiryAccessPeriod.finalFee.get("USD");
+
+    settings.registryPolicy.domainExpiryAccessPeriod.initialFee =
+        ImmutableMap.of("USD", new BigDecimal("110.00"));
+    settings.registryPolicy.domainExpiryAccessPeriod.finalFee =
+        ImmutableMap.of("USD", new BigDecimal("110.00"));
+
+    try {
+      Instant deletionTime = clock.now().minus(Duration.ofDays(5));
+      persistDeletedDomain("example1.tld", deletionTime);
+
+      setEppInput("domain_check_fee_stdv1.xml");
+      Instant expectedExpiration = deletionTime.plus(Duration.ofHours(121));
+      String expectedDescription =
+          String.format("Expiry Access Period, fee expires: %s", expectedExpiration);
+      runFlowAssertResponse(
+          loadFile(
+              "domain_check_fee_xap_response.xml",
+              ImmutableMap.of("FEE_DESCRIPTION", expectedDescription)));
+    } finally {
+      settings.registryPolicy.domainExpiryAccessPeriod.initialFee =
+          ImmutableMap.of("USD", originalInitialFee);
+      settings.registryPolicy.domainExpiryAccessPeriod.finalFee =
+          ImmutableMap.of("USD", originalFinalFee);
+    }
   }
 
   static AllocationToken setUpDefaultToken() {

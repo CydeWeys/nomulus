@@ -82,6 +82,7 @@ import google.registry.model.tld.label.ReservationType;
 import google.registry.persistence.VKey;
 import google.registry.util.Clock;
 import jakarta.inject.Inject;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.HashSet;
@@ -137,6 +138,10 @@ public final class DomainCheckFlow implements TransactionalFlow {
   @Inject
   @Config("maxChecks")
   int maxChecks;
+
+  @Inject
+  @Config("domainExpiryAccessPeriodTotalLength")
+  Duration domainExpiryAccessPeriodTotalLength;
 
   @Inject @Superuser boolean isSuperuser;
   @Inject Clock clock;
@@ -339,16 +344,29 @@ public final class DomainCheckFlow implements TransactionalFlow {
                   .build());
           continue;
         }
+        Optional<Domain> domainForFee = domain;
+        boolean isAvailable = availableDomains.contains(domainName);
+        if (isAvailable
+            && feeCheckItem.getCommandName().equals(FeeQueryCommandExtensionItem.CommandName.CREATE)
+            && tld.getExpiryAccessPeriodModeAt(now) == Tld.ExpiryAccessPeriodMode.ENABLED) {
+          Optional<Domain> recentlyDeletedDomain =
+              ForeignKeyUtils.loadResource(
+                  Domain.class, domainName, now.minus(domainExpiryAccessPeriodTotalLength));
+          if (recentlyDeletedDomain.isPresent()
+              && recentlyDeletedDomain.get().getDeletionTime().isBefore(now)) {
+            domainForFee = recentlyDeletedDomain;
+          }
+        }
         handleFeeRequest(
             feeCheckItem,
             builder,
             domainNames.get(domainName),
-            domain,
+            domainForFee,
             feeCheck.getCurrency(),
             now,
             pricingLogic,
             token,
-            availableDomains.contains(domainName),
+            isAvailable,
             recurrences.getOrDefault(domainName, null));
         // In the case of a registrar that is running a tiered pricing promotion, we issue two
         // responses for the CREATE fee check command: one (the default response) with the

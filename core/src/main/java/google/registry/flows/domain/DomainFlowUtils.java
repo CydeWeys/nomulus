@@ -642,6 +642,7 @@ public class DomainFlowUtils {
                       tld,
                       domainNameString,
                       now,
+                      domain,
                       years,
                       isAnchorTenant(domainName, allocationToken, Optional.empty()),
                       isSunrise,

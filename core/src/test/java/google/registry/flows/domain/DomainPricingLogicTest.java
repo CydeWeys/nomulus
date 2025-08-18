@@ -33,6 +33,7 @@ import static google.registry.util.DateTimeUtils.plusHours;
 import static org.joda.money.CurrencyUnit.USD;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Iterables;
@@ -58,6 +59,7 @@ import google.registry.testing.FakeClock;
 import google.registry.testing.FakeHttpSession;
 import google.registry.util.Clock;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import org.joda.money.Money;
@@ -85,7 +87,12 @@ public class DomainPricingLogicTest {
     createTld("example");
     sessionMetadata = new HttpSessionMetadata(new FakeHttpSession());
     domainPricingLogic =
-        new DomainPricingLogic(new DomainPricingCustomLogic(eppInput, sessionMetadata, null));
+        new DomainPricingLogic(
+            new DomainPricingCustomLogic(eppInput, sessionMetadata, null),
+            Duration.ofDays(30),
+            Duration.ofDays(1),
+            ImmutableMap.of(),
+            ImmutableMap.of());
     tld =
         persistResource(
             Tld.get("example")
@@ -146,7 +153,14 @@ public class DomainPricingLogicTest {
         persistResource(Tld.get("sunrise").asBuilder().setTldStateTransitions(transitions).build());
     assertThat(
             domainPricingLogic.getCreatePrice(
-                sunriseTld, "domain.sunrise", clock.now(), 2, false, true, Optional.empty()))
+                sunriseTld,
+                "domain.sunrise",
+                clock.now(),
+                Optional.empty(),
+                2,
+                false,
+                true,
+                Optional.empty()))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -170,7 +184,14 @@ public class DomainPricingLogicTest {
                 .build());
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "default.example", clock.now(), 1, false, false, Optional.of(allocationToken)))
+                tld,
+                "default.example",
+                clock.now(),
+                Optional.empty(),
+                1,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -195,7 +216,14 @@ public class DomainPricingLogicTest {
     // 3 year create should be 5 (discount price) + 10*2 (regular price) = 25.
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "default.example", clock.now(), 3, false, false, Optional.of(allocationToken)))
+                tld,
+                "default.example",
+                clock.now(),
+                Optional.empty(),
+                3,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -983,7 +1011,14 @@ public class DomainPricingLogicTest {
                 .build());
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "premium.example", clock.now(), 1, false, false, Optional.of(allocationToken)))
+                tld,
+                "premium.example",
+                clock.now(),
+                Optional.empty(),
+                1,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -992,7 +1027,14 @@ public class DomainPricingLogicTest {
     // Two-year create should be 13 (standard price) + 100 (premium price), and it's premium
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "premium.example", clock.now(), 2, false, false, Optional.of(allocationToken)))
+                tld,
+                "premium.example",
+                clock.now(),
+                Optional.empty(),
+                2,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -1028,7 +1070,14 @@ public class DomainPricingLogicTest {
     // are standard
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "premium.example", clock.now(), 2, false, false, Optional.of(allocationToken)))
+                tld,
+                "premium.example",
+                clock.now(),
+                Optional.empty(),
+                2,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -1037,7 +1086,14 @@ public class DomainPricingLogicTest {
     // Similarly, 3 years should be 13 + 10 + 10
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "premium.example", clock.now(), 3, false, false, Optional.of(allocationToken)))
+                tld,
+                "premium.example",
+                clock.now(),
+                Optional.empty(),
+                3,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -1058,7 +1114,14 @@ public class DomainPricingLogicTest {
     // Two-year create should be 100 (premium 1st year) plus 10 (nonpremium 2nd year)
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "premium.example", clock.now(), 2, false, false, Optional.of(allocationToken)))
+                tld,
+                "premium.example",
+                clock.now(),
+                Optional.empty(),
+                2,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
@@ -1067,7 +1130,14 @@ public class DomainPricingLogicTest {
     // Similarly, 3 years should be 100 + 10 + 10
     assertThat(
             domainPricingLogic.getCreatePrice(
-                tld, "premium.example", clock.now(), 3, false, false, Optional.of(allocationToken)))
+                tld,
+                "premium.example",
+                clock.now(),
+                Optional.empty(),
+                3,
+                false,
+                false,
+                Optional.of(allocationToken)))
         .isEqualTo(
             new FeesAndCredits.Builder()
                 .setCurrency(USD)
