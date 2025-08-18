@@ -768,6 +768,7 @@ public class DomainFlowUtils {
           builder.setReasonIfSupported("reserved");
         } else {
           builder.setAvailIfSupported(true);
+          // TODO: Pass along domain for lookback logic.
           fees =
               pricingLogic
                   .getCreatePrice(

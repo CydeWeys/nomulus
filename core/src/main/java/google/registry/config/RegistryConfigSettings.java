@@ -14,6 +14,7 @@
 
 package google.registry.config;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -100,6 +101,7 @@ public class RegistryConfigSettings {
     public String tmchCrlUrl;
     public String tmchMarksDbUrl;
     public String registryAdminClientId;
+    public DomainExpiryAccessPeriod domainExpiryAccessPeriod;
     public String premiumTermsExportDisclaimer;
     public String reservedTermsExportDisclaimer;
     public String whoisRedactedEmailText;
@@ -113,6 +115,13 @@ public class RegistryConfigSettings {
     public double sunriseDomainCreateDiscount;
     public Set<String> tieredPricingPromotionRegistrarIds;
     public Set<String> noPollMessageOnDeletionRegistrarIds;
+  }
+
+  public static class DomainExpiryAccessPeriod {
+    public long totalLengthSeconds;
+    public long tierLengthSeconds;
+    public Map<String, BigDecimal> initialFee;
+    public Map<String, BigDecimal> finalFee;
   }
 
   /** Configuration for Hibernate. */

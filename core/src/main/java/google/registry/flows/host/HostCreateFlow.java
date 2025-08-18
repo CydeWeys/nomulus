@@ -51,6 +51,7 @@ import google.registry.model.reporting.IcannReportingTypes.ActivityReportField;
 import jakarta.inject.Inject;
 import java.util.Optional;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 /**
  * An EPP flow that creates a new host.
@@ -100,7 +101,7 @@ public final class HostCreateFlow implements MutatingFlow {
     extensionManager.validate();
     Create command = (Create) resourceCommand;
     DateTime now = tm().getTransactionTime();
-    verifyResourceDoesNotExist(Host.class, targetId, now, registrarId);
+    verifyResourceDoesNotExist(Host.class, targetId, now, Duration.ZERO, registrarId);
     // The superordinate domain of the host object if creating an in-bailiwick host, or null if
     // creating an external host. This is looked up before we actually create the Host object, so
     // we can detect error conditions earlier.

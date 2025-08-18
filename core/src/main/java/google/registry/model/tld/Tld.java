@@ -115,6 +115,7 @@ public class Tld extends ImmutableObject implements Buildable, UnsafeSerializabl
 
   public static final boolean DEFAULT_ESCROW_ENABLED = false;
   public static final boolean DEFAULT_DNS_PAUSED = false;
+  public static final boolean DEFAULT_EXPIRY_ACCESS_PERIOD_ENABLED = false;
   public static final Duration DEFAULT_ADD_GRACE_PERIOD = Duration.standardDays(5);
   public static final Duration DEFAULT_AUTO_RENEW_GRACE_PERIOD = Duration.standardDays(45);
   public static final Duration DEFAULT_REDEMPTION_GRACE_PERIOD = Duration.standardDays(30);
@@ -415,6 +416,10 @@ public class Tld extends ImmutableObject implements Buildable, UnsafeSerializabl
   @Column(nullable = false)
   boolean dnsPaused = DEFAULT_DNS_PAUSED;
 
+  /** Whether the Expiry Access Period following domain deletes is enabled for this TLD. */
+  @Column(nullable = false)
+  boolean expiryAccessPeriodEnabled = DEFAULT_EXPIRY_ACCESS_PERIOD_ENABLED;
+
   /**
    * The length of the add grace period for this TLD.
    *
@@ -625,6 +630,10 @@ public class Tld extends ImmutableObject implements Buildable, UnsafeSerializabl
 
   public boolean getDnsPaused() {
     return dnsPaused;
+  }
+
+  public boolean isExpiryAccessPeriodEnabled() {
+    return expiryAccessPeriodEnabled;
   }
 
   @Nullable
@@ -858,6 +867,11 @@ public class Tld extends ImmutableObject implements Buildable, UnsafeSerializabl
 
     public Builder setDnsPaused(boolean paused) {
       getInstance().dnsPaused = paused;
+      return this;
+    }
+
+    public Builder setExpiryAccessPeriodEnabled(boolean enabled) {
+      getInstance().expiryAccessPeriodEnabled = enabled;
       return this;
     }
 

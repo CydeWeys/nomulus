@@ -16,6 +16,7 @@ package google.registry.config;
 
 import static com.google.common.base.Suppliers.memoize;
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static com.google.common.collect.ImmutableSortedMap.toImmutableSortedMap;
 import static google.registry.config.ConfigUtils.makeUrl;
 import static google.registry.util.DateTimeUtils.START_OF_TIME;
@@ -31,6 +32,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.Maps;
 import dagger.Module;
 import dagger.Provides;
 import google.registry.bsa.UploadBsaUnavailableDomainsAction;
@@ -47,13 +49,18 @@ import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Duration;
@@ -1143,6 +1150,48 @@ public final class RegistryConfig {
     @Config("registryAdminClientId")
     public static String provideRegistryAdminClientId(RegistryConfigSettings config) {
       return config.registryPolicy.registryAdminClientId;
+    }
+
+    /**
+     * Returns the total length of the Expiry Access Period.
+     */
+    @Provides
+    @Config("domainExpiryAccessPeriodTotalLength")
+    public static Duration provideDomainExpiryAccessPeriodTotalLength(
+        RegistryConfigSettings config) {
+      return Duration.standardSeconds(
+          config.registryPolicy.domainExpiryAccessPeriod.totalLengthSeconds);
+    }
+
+    /**
+     * Returns the length of each tier of the Expiry Access Period.
+     */
+    @Provides
+    @Config("domainExpiryAccessPeriodTierLength")
+    public static Duration provideDomainExpiryAccessPeriodTierLength(
+        RegistryConfigSettings config) {
+      return Duration.standardSeconds(
+          config.registryPolicy.domainExpiryAccessPeriod.tierLengthSeconds);
+    }
+
+    /** Returns a map of the fee for the first tier of the Expiry Access Period, by currency. */
+    @Provides
+    @Config("domainExpiryAccessPeriodInitialFee")
+    public static ImmutableMap<CurrencyUnit, BigDecimal> provideDomainExpiryAccessPeriodInitialFee(
+        RegistryConfigSettings config) {
+      return config.registryPolicy.domainExpiryAccessPeriod.initialFee.entrySet().stream().collect(
+          toImmutableMap(entry -> CurrencyUnit.of(entry.getKey()),
+              Entry::getValue));
+    }
+
+    /** Returns a map of the fee for the last tier of the Expiry Access Period, by currency. */
+    @Provides
+    @Config("domainExpiryAccessPeriodFinalFee")
+    public static ImmutableMap<CurrencyUnit, BigDecimal> provideDomainExpiryAccessPeriodFinalFee(
+        RegistryConfigSettings config) {
+      return config.registryPolicy.domainExpiryAccessPeriod.finalFee.entrySet().stream().collect(
+          toImmutableMap(entry -> CurrencyUnit.of(entry.getKey()),
+              Entry::getValue));
     }
 
     @Singleton

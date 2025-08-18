@@ -45,6 +45,7 @@ import google.registry.model.reporting.HistoryEntry;
 import google.registry.model.reporting.IcannReportingTypes.ActivityReportField;
 import jakarta.inject.Inject;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 /**
  * An EPP flow that creates a new contact.
@@ -78,7 +79,7 @@ public final class ContactCreateFlow implements MutatingFlow {
     }
     Create command = (Create) resourceCommand;
     DateTime now = tm().getTransactionTime();
-    verifyResourceDoesNotExist(Contact.class, targetId, now, registrarId);
+    verifyResourceDoesNotExist(Contact.class, targetId, now, Duration.ZERO, registrarId);
     Contact newContact =
         new Contact.Builder()
             .setContactId(targetId)

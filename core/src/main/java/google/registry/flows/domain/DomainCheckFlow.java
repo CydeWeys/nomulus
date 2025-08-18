@@ -292,6 +292,7 @@ public final class DomainCheckFlow implements TransactionalFlow {
     FeeCheckCommandExtension<?, ?> feeCheck = feeCheckOpt.get();
     ImmutableList.Builder<FeeCheckResponseExtensionItem> responseItems =
         new ImmutableList.Builder<>();
+    // TODO: Apply lookback logic here.
     ImmutableMap<String, Domain> domainObjs =
         loadDomainsForChecks(feeCheck, domainNames, existingDomains);
     ImmutableMap<String, BillingRecurrence> recurrences = loadRecurrencesForDomains(domainObjs);
