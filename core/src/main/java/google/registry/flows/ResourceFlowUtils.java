@@ -51,6 +51,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 /** Static utility functions for resource flows. */
 public final class ResourceFlowUtils {
@@ -104,10 +105,27 @@ public final class ResourceFlowUtils {
     return resource.orElseThrow(() -> new ResourceDoesNotExistException(clazz, targetId));
   }
 
-  public static <R extends EppResource> void verifyResourceDoesNotExist(
-      Class<R> clazz, String targetId, DateTime now, String registrarId) throws EppException {
-    Optional<R> resource = ForeignKeyUtils.loadResource(clazz, targetId, now);
+  /**
+   * Verifies that a resource with the specified type and id did not exist at the specified time.
+   *
+   * <p>This will throw an exception if the resource exists with a deletionTime greater than the
+   * specified time (i.e. a registrar is attempting to create a duplicate domain, host, or contact).
+   * If the resource had existed within the specified lookback window, but is not active now, i.e.
+   * it is recently deleted, then don't throw an exception, but do return the recently deleted
+   * resource for further processing (this is used by the Expiry Access Period).
+   *
+   * <p>If there is no need to specially handle the situation of recently deleted resources, then
+   * simply pass a lookback duration of {@link Duration.ZERO}.
+   */
+  public static <R extends EppResource> Optional<R> verifyResourceDoesNotExist(
+      Class<R> clazz, String targetId, DateTime now, Duration lookback, String registrarId)
+      throws EppException {
+    DateTime startOfWindow = now.minus(lookback);
+    Optional<R> resource = ForeignKeyUtils.loadResource(clazz, targetId, startOfWindow);
     if (resource.isPresent()) {
+      if (resource.get().getDeletionTime().isBefore(now)) {
+        return resource;
+      }
       // These are similar exceptions, but we can track them internally as log-based metrics.
       if (Objects.equals(registrarId, resource.get().getPersistedCurrentSponsorRegistrarId())) {
         throw new ResourceAlreadyExistsForThisClientException(targetId);
@@ -115,6 +133,7 @@ public final class ResourceFlowUtils {
         throw new ResourceCreateContentionException(targetId);
       }
     }
+    return Optional.empty();
   }
 
   /** Check that the given AuthInfo is present for a resource being transferred. */

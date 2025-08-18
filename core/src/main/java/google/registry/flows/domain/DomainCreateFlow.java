@@ -18,6 +18,7 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static google.registry.dns.DnsUtils.requestDomainDnsRefresh;
 import static google.registry.flows.FlowUtils.persistEntityChanges;
 import static google.registry.flows.FlowUtils.validateRegistrarIsLoggedIn;
+import static google.registry.flows.ResourceFlowUtils.verifyResourceDoesNotExist;
 import static google.registry.flows.domain.DomainFlowUtils.COLLISION_MESSAGE;
 import static google.registry.flows.domain.DomainFlowUtils.checkAllowedAccessToTld;
 import static google.registry.flows.domain.DomainFlowUtils.checkHasBillingAccount;
@@ -58,6 +59,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.net.InternetDomainName;
 import google.registry.config.RegistryConfig;
+import google.registry.config.RegistryConfig.Config;
 import google.registry.flows.EppException;
 import google.registry.flows.EppException.CommandUseErrorException;
 import google.registry.flows.EppException.ParameterValuePolicyErrorException;
@@ -218,6 +220,7 @@ public final class DomainCreateFlow implements MutatingFlow {
   @Inject DomainFlowTmchUtils tmchUtils;
   @Inject DomainPricingLogic pricingLogic;
   @Inject DomainDeletionTimeCache domainDeletionTimeCache;
+  @Inject @Config("domainExpiryAccessPeriodTotalLength") Duration domainExpiryAccessPeriodTotalLength;
 
   @Inject
   DomainCreateFlow() {}
@@ -245,6 +248,10 @@ public final class DomainCreateFlow implements MutatingFlow {
     InternetDomainName domainName = validateDomainName(command.getDomainName());
     String domainLabel = domainName.parts().getFirst();
     Tld tld = Tld.get(domainName.parent().toString());
+    Duration lookback =
+        tld.isExpiryAccessPeriodEnabled() ? domainExpiryAccessPeriodTotalLength : Duration.ZERO;
+    Optional<Domain> recentlyDeletedDomain =
+        verifyResourceDoesNotExist(Domain.class, targetId, now, lookback, registrarId);
     validateCreateCommandContactsAndNameservers(command, tld, domainName);
     TldState tldState = tld.getTldState(now);
     Optional<LaunchCreateExtension> launchCreate =
@@ -327,7 +334,7 @@ public final class DomainCreateFlow implements MutatingFlow {
         eppInput.getSingleExtension(FeeCreateCommandExtension.class);
     FeesAndCredits feesAndCredits =
         pricingLogic.getCreatePrice(
-            tld, targetId, now, years, isAnchorTenant, isSunriseCreate, allocationToken);
+            tld, targetId, now, recentlyDeletedDomain, years, isAnchorTenant, isSunriseCreate, allocationToken);
     validateFeeChallenge(feeCreate, feesAndCredits, defaultTokenUsed);
     Optional<SecDnsCreateExtension> secDnsCreate =
         validateSecDnsExtension(eppInput.getSingleExtension(SecDnsCreateExtension.class));
@@ -360,6 +367,7 @@ public final class DomainCreateFlow implements MutatingFlow {
     if (!feesAndCredits.getEapCost().isZero()) {
       entitiesToInsert.add(createEapBillingEvent(feesAndCredits, createBillingEvent));
     }
+    // TODO: Bill for XAP cost, if any.
 
     ImmutableSet<ReservationType> reservationTypes = getReservationTypes(domainName);
     ImmutableSet<StatusValue> statuses =

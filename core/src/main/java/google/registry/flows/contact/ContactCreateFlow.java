@@ -19,6 +19,7 @@ import google.registry.flows.annotations.ReportingSpec;
 import google.registry.flows.exceptions.ContactsProhibitedException;
 import google.registry.model.reporting.IcannReportingTypes.ActivityReportField;
 import jakarta.inject.Inject;
+import org.joda.time.Duration;
 
 /**
  * An EPP flow meant to create a new contact.
