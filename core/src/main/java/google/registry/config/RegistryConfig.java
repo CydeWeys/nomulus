@@ -1148,8 +1148,8 @@ public final class RegistryConfig {
 
     @Provides
     @Config("tokenRefreshDelay")
-    public static java.time.Duration provideTokenRefreshDelay(RegistryConfigSettings config) {
-      return java.time.Duration.ofSeconds(config.credentialOAuth.tokenRefreshDelaySeconds);
+    public static Duration provideTokenRefreshDelay(RegistryConfigSettings config) {
+      return Duration.ofSeconds(config.credentialOAuth.tokenRefreshDelaySeconds);
     }
 
     /** OAuth client ID used by the nomulus tool. */
@@ -1505,8 +1505,8 @@ public final class RegistryConfig {
   }
 
   /** Returns the amount of time a singleton should be cached, before expiring. */
-  public static java.time.Duration getSingletonCacheRefreshDuration() {
-    return java.time.Duration.ofSeconds(CONFIG_SETTINGS.get().caching.singletonCacheRefreshSeconds);
+  public static Duration getSingletonCacheRefreshDuration() {
+    return Duration.ofSeconds(CONFIG_SETTINGS.get().caching.singletonCacheRefreshSeconds);
   }
 
   /**
@@ -1515,13 +1515,13 @@ public final class RegistryConfig {
    * @see google.registry.model.tld.label.ReservedList
    * @see google.registry.model.tld.label.PremiumList
    */
-  public static java.time.Duration getDomainLabelListCacheDuration() {
-    return java.time.Duration.ofSeconds(CONFIG_SETTINGS.get().caching.domainLabelCachingSeconds);
+  public static Duration getDomainLabelListCacheDuration() {
+    return Duration.ofSeconds(CONFIG_SETTINGS.get().caching.domainLabelCachingSeconds);
   }
 
   /** Returns the amount of time a singleton should be cached in persist mode, before expiring. */
-  public static java.time.Duration getSingletonCachePersistDuration() {
-    return java.time.Duration.ofSeconds(CONFIG_SETTINGS.get().caching.singletonCachePersistSeconds);
+  public static Duration getSingletonCachePersistDuration() {
+    return Duration.ofSeconds(CONFIG_SETTINGS.get().caching.singletonCachePersistSeconds);
   }
 
   /**
@@ -1543,8 +1543,8 @@ public final class RegistryConfig {
   /**
    * Returns the amount of time an EPP resource or key should be cached in memory before expiring.
    */
-  public static java.time.Duration getEppResourceCachingDuration() {
-    return java.time.Duration.ofSeconds(CONFIG_SETTINGS.get().caching.eppResourceCachingSeconds);
+  public static Duration getEppResourceCachingDuration() {
+    return Duration.ofSeconds(CONFIG_SETTINGS.get().caching.eppResourceCachingSeconds);
   }
 
   /** Returns the maximum number of EPP resources and keys to keep in in-memory cache. */
@@ -1553,8 +1553,8 @@ public final class RegistryConfig {
   }
 
   /** Returns the amount of time that a particular claims list should be cached. */
-  public static java.time.Duration getClaimsListCacheDuration() {
-    return java.time.Duration.ofSeconds(CONFIG_SETTINGS.get().caching.claimsListCachingSeconds);
+  public static Duration getClaimsListCacheDuration() {
+    return Duration.ofSeconds(CONFIG_SETTINGS.get().caching.claimsListCachingSeconds);
   }
 
   /** Returns the email address that outgoing emails from the app are sent from. */

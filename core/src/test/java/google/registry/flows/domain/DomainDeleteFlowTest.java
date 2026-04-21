@@ -385,7 +385,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
 
     Domain domain = reloadResourceByForeignKey();
     Instant redemptionEndTime = plusDays(domain.getLastEppUpdateTime(), 3);
-    Domain domainAtRedemptionTime = domain.cloneProjectedAtInstant(redemptionEndTime);
+    Domain domainAtRedemptionTime = domain.cloneProjectedAtTime(redemptionEndTime);
     assertAboutDomains()
         .that(domainAtRedemptionTime)
         .hasLastEppUpdateRegistrarId("TheRegistrar")
@@ -472,7 +472,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
     // message should now be deleted.
     assertAboutDomains().that(domain).hasDeletePollMessage();
     Instant deletionTime = domain.getDeletionTime();
-    assertThat(getPollMessages("TheRegistrar", deletionTime.minus(java.time.Duration.ofMinutes(1))))
+    assertThat(getPollMessages("TheRegistrar", deletionTime.minus(Duration.ofMinutes(1))))
         .isEmpty();
     assertThat(getPollMessages("TheRegistrar", deletionTime)).hasSize(1);
     assertThat(domain.getDeletePollMessage())
@@ -507,7 +507,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
     // There should now be two poll messages; one for the delete of the domain (in the future), and
     // another for the unacked autorenew messages.
     Instant deletionTime = reloadResourceByForeignKey().getDeletionTime();
-    assertThat(getPollMessages("TheRegistrar", deletionTime.minus(java.time.Duration.ofMinutes(1))))
+    assertThat(getPollMessages("TheRegistrar", deletionTime.minus(Duration.ofMinutes(1))))
         .hasSize(1);
     assertThat(getPollMessages("TheRegistrar", deletionTime)).hasSize(2);
   }
@@ -543,7 +543,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
     persistResource(
         Tld.get("tld")
             .asBuilder()
-            .setRenewBillingCostTransitionsInstant(
+            .setRenewBillingCostTransitions(
                 ImmutableSortedMap.of(
                     START_INSTANT,
                     Money.of(USD, 11),
@@ -626,7 +626,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
     assertThat(panData.getActionResult()).isFalse();
     // There should be a future poll message to the losing registrar at the deletion time.
     Instant deletionTime = domain.getDeletionTime();
-    assertThat(getPollMessages("TheRegistrar", deletionTime.minus(java.time.Duration.ofMinutes(1))))
+    assertThat(getPollMessages("TheRegistrar", deletionTime.minus(Duration.ofMinutes(1))))
         .isEmpty();
     assertThat(getPollMessages("TheRegistrar", deletionTime)).hasSize(1);
     assertOnlyBillingEventIsClosedAutorenew("TheRegistrar");
@@ -1325,7 +1325,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
     persistResource(
         Tld.get("tld")
             .asBuilder()
-            .setRenewBillingCostTransitionsInstant(
+            .setRenewBillingCostTransitions(
                 ImmutableSortedMap.of(
                     START_INSTANT,
                     Money.of(USD, 11),
@@ -1344,7 +1344,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
     persistResource(
         Tld.get("tld")
             .asBuilder()
-            .setRenewBillingCostTransitionsInstant(
+            .setRenewBillingCostTransitions(
                 ImmutableSortedMap.of(
                     START_INSTANT,
                     Money.of(USD, 11),
@@ -1362,7 +1362,7 @@ class DomainDeleteFlowTest extends ResourceFlowTestCase<DomainDeleteFlow, Domain
     persistResource(
         Tld.get("tld")
             .asBuilder()
-            .setRenewBillingCostTransitionsInstant(
+            .setRenewBillingCostTransitions(
                 ImmutableSortedMap.of(
                     START_INSTANT,
                     Money.of(USD, 11),
