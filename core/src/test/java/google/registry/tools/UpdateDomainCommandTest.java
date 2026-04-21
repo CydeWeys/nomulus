@@ -28,6 +28,7 @@ import static google.registry.testing.TestLogHandlerUtils.assertNoLogMessage;
 import static google.registry.util.DateTimeUtils.END_INSTANT;
 import static google.registry.util.DateTimeUtils.minusDays;
 import static google.registry.util.DateTimeUtils.plusDays;
+import static google.registry.util.DateTimeUtils.toInstant;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.beust.jcommander.ParameterException;
@@ -295,7 +296,7 @@ class UpdateDomainCommandTest extends EppToolCommandTestCase<UpdateDomainCommand
     persistResource(
         domain
             .asBuilder()
-            .setRegistrationExpirationTime(fakeClock.nowUtc().plusDays(360))
+            .setRegistrationExpirationTime(toInstant(fakeClock.nowUtc().plusDays(360)))
             .setAutorenewBillingEvent(autorenewBillingEvent.createVKey())
             .setGracePeriods(
                 ImmutableSet.of(
