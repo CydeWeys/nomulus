@@ -33,6 +33,15 @@ public interface Sleeper {
   void sleep(ReadableDuration duration) throws InterruptedException;
 
   /**
+   * Puts the current thread to sleep.
+   *
+   * @throws InterruptedException if this thread was interrupted
+   */
+  default void sleep(java.time.Duration duration) throws InterruptedException {
+    sleep(org.joda.time.Duration.millis(duration.toMillis()));
+  }
+
+  /**
    * Puts the current thread to sleep, ignoring interrupts.
    *
    * <p>If {@link InterruptedException} was caught, then {@code Thread.currentThread().interrupt()}
@@ -43,12 +52,40 @@ public interface Sleeper {
   void sleepUninterruptibly(ReadableDuration duration);
 
   /**
+   * Puts the current thread to sleep, ignoring interrupts.
+   *
+   * <p>If {@link InterruptedException} was caught, then {@code Thread.currentThread().interrupt()}
+   * will be called at the end of the {@code duration}.
+   *
+   * @see com.google.common.util.concurrent.Uninterruptibles#sleepUninterruptibly
+   */
+  default void sleepUninterruptibly(java.time.Duration duration) {
+    sleepUninterruptibly(org.joda.time.Duration.millis(duration.toMillis()));
+  }
+
+  /**
    * Puts the current thread to interruptible sleep.
    *
    * <p>This is a convenience method for {@link #sleep} that properly converts an {@link
    * InterruptedException} to a {@link RuntimeException}.
    */
   default void sleepInterruptibly(ReadableDuration duration) {
+    try {
+      sleep(duration);
+    } catch (InterruptedException e) {
+      // Restore current thread's interrupted state.
+      Thread.currentThread().interrupt();
+      throw new RuntimeException("Interrupted.", e);
+    }
+  }
+
+  /**
+   * Puts the current thread to interruptible sleep.
+   *
+   * <p>This is a convenience method for {@link #sleep} that properly converts an {@link
+   * InterruptedException} to a {@link RuntimeException}.
+   */
+  default void sleepInterruptibly(java.time.Duration duration) {
     try {
       sleep(duration);
     } catch (InterruptedException e) {

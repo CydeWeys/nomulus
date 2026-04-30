@@ -32,8 +32,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Optional;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 /**
@@ -82,15 +83,22 @@ public final class RdeRevision extends UpdateAutoTimestampEntity {
    *
    * @return {@code 0} for first deposit generation and {@code >0} for resends
    */
-  public static int getNextRevision(String tld, DateTime date, RdeMode mode) {
-    RdeRevisionId sqlKey = RdeRevisionId.create(tld, date.toLocalDate(), mode);
+  public static int getNextRevision(String tld, Instant date, RdeMode mode) {
+    RdeRevisionId sqlKey =
+        RdeRevisionId.create(
+            tld,
+            new LocalDate(
+                date.atZone(ZoneOffset.UTC).getYear(),
+                date.atZone(ZoneOffset.UTC).getMonthValue(),
+                date.atZone(ZoneOffset.UTC).getDayOfMonth()),
+            mode);
     Optional<RdeRevision> revisionOptional =
         tm().transact(() -> tm().loadByKeyIfPresent(VKey.create(RdeRevision.class, sqlKey)));
     return revisionOptional.map(rdeRevision -> rdeRevision.revision + 1).orElse(0);
   }
 
   /** Returns the latest revision of the report already generated for the given triplet. */
-  public static Optional<Integer> getCurrentRevision(String tld, DateTime date, RdeMode mode) {
+  public static Optional<Integer> getCurrentRevision(String tld, Instant date, RdeMode mode) {
     int nextRevision = getNextRevision(tld, date, mode);
     if (nextRevision == 0) {
       return Optional.empty();
@@ -107,10 +115,17 @@ public final class RdeRevision extends UpdateAutoTimestampEntity {
    * @throws IllegalStateException if not in a transaction
    * @throws VerifyException if the state doesn't meet the above criteria
    */
-  public static void saveRevision(String tld, DateTime date, RdeMode mode, int revision) {
+  public static void saveRevision(String tld, Instant date, RdeMode mode, int revision) {
     checkArgument(revision >= 0, "Negative revision: %s", revision);
     tm().assertInTransaction();
-    RdeRevisionId sqlKey = RdeRevisionId.create(tld, date.toLocalDate(), mode);
+    RdeRevisionId sqlKey =
+        RdeRevisionId.create(
+            tld,
+            new LocalDate(
+                date.atZone(ZoneOffset.UTC).getYear(),
+                date.atZone(ZoneOffset.UTC).getMonthValue(),
+                date.atZone(ZoneOffset.UTC).getDayOfMonth()),
+            mode);
     Optional<RdeRevision> revisionOptional =
         tm().loadByKeyIfPresent(VKey.create(RdeRevision.class, sqlKey));
     if (revision == 0) {
@@ -133,7 +148,15 @@ public final class RdeRevision extends UpdateAutoTimestampEntity {
           revision - 1,
           revisionOptional.get());
     }
-    RdeRevision object = create(tld, date.toLocalDate(), mode, revision);
+    RdeRevision object =
+        create(
+            tld,
+            new LocalDate(
+                date.atZone(ZoneOffset.UTC).getYear(),
+                date.atZone(ZoneOffset.UTC).getMonthValue(),
+                date.atZone(ZoneOffset.UTC).getDayOfMonth()),
+            mode,
+            revision);
     tm().put(object);
   }
 

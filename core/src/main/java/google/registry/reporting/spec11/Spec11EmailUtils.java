@@ -41,10 +41,10 @@ import google.registry.util.Sleeper;
 import jakarta.inject.Inject;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import org.joda.time.Duration;
-import org.joda.time.LocalDate;
 
 /** Provides e-mail functionality for Spec11 tasks, such as sending Spec11 reports to registrars. */
 public class Spec11EmailUtils {
@@ -104,7 +104,7 @@ public class Spec11EmailUtils {
       if (!filteredMatches.threatMatches().isEmpty()) {
         if (numRegistrarsEmailed > 0) {
           try {
-            sleeper.sleep(emailThrottleDuration);
+            sleeper.sleep(org.joda.time.Duration.millis(emailThrottleDuration.toMillis()));
           } catch (InterruptedException ie) {
             throw new RuntimeException(ie);
           }

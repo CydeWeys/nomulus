@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.google.common.collect.ImmutableList;
 import google.registry.tmch.LordnLog.Result;
+import java.time.Instant;
 import java.util.Map.Entry;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link LordnLog}. */
@@ -46,8 +46,8 @@ class LordnLogTest {
   void testSuccess_parseFirstLine() {
     LordnLog log = LordnLog.parse(EXAMPLE_FROM_RFC);
     assertThat(log.getStatus()).isEqualTo(LordnLog.Status.ACCEPTED);
-    assertThat(log.getLogCreation()).isEqualTo(DateTime.parse("2012-08-16T02:15:00.0Z"));
-    assertThat(log.getLordnCreation()).isEqualTo(DateTime.parse("2012-08-16T00:00:00.0Z"));
+    assertThat(log.getLogCreation()).isEqualTo(Instant.parse("2012-08-16T02:15:00.0Z"));
+    assertThat(log.getLordnCreation()).isEqualTo(Instant.parse("2012-08-16T00:00:00.0Z"));
     assertThat(log.getLogId())
         .isEqualTo("0000000000000478Nzs+3VMkR8ckuUynOLmyeqTmZQSbzDuf/R50n2n5QX4=");
     assertThat(log.hasWarnings()).isFalse();
@@ -113,19 +113,20 @@ class LordnLogTest {
 
   @Test
   void testSuccess_toString() {
-    assertThat(LordnLog.parse(EXAMPLE_WITH_WARNINGS).toString()).isEqualTo(
-        "LordnLog{"
-        + "logId=0000000000000004799, "
-        + "status=ACCEPTED, "
-        + "logCreation=2014-03-21T15:40:08.400Z, "
-        + "lordnCreation=2014-03-21T15:35:28.000Z, "
-        + "hasWarnings=true, "
-        + "results={"
-        + "19dc9b4-roid=Result{code=3610, outcome=WARNING, "
-        + "description=DN reported outside of the time window}, "
-        + "1580e26-roid=Result{code=3610, outcome=WARNING, "
-        + "description=DN reported outside of the time window}"
-        + "}}");
+    assertThat(LordnLog.parse(EXAMPLE_WITH_WARNINGS).toString())
+        .isEqualTo(
+            "LordnLog{"
+                + "logId=0000000000000004799, "
+                + "status=ACCEPTED, "
+                + "logCreation=2014-03-21T15:40:08.400Z, "
+                + "lordnCreation=2014-03-21T15:35:28Z, "
+                + "hasWarnings=true, "
+                + "results={"
+                + "19dc9b4-roid=Result{code=3610, outcome=WARNING, "
+                + "description=DN reported outside of the time window}, "
+                + "1580e26-roid=Result{code=3610, outcome=WARNING, "
+                + "description=DN reported outside of the time window}"
+                + "}}");
   }
 
   @Test
@@ -139,8 +140,8 @@ class LordnLogTest {
   void testSuccess_withWarnings() {
     LordnLog log = LordnLog.parse(EXAMPLE_WITH_WARNINGS);
     assertThat(log.getStatus()).isEqualTo(LordnLog.Status.ACCEPTED);
-    assertThat(log.getLogCreation()).isEqualTo(DateTime.parse("2014-03-21T15:40:08.4Z"));
-    assertThat(log.getLordnCreation()).isEqualTo(DateTime.parse("2014-03-21T15:35:28.0Z"));
+    assertThat(log.getLogCreation()).isEqualTo(Instant.parse("2014-03-21T15:40:08.4Z"));
+    assertThat(log.getLordnCreation()).isEqualTo(Instant.parse("2014-03-21T15:35:28.0Z"));
     assertThat(log.getLogId()).isEqualTo("0000000000000004799");
     assertThat(log.hasWarnings()).isTrue();
 

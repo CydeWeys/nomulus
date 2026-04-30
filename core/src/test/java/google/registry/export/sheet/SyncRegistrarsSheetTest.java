@@ -28,7 +28,6 @@ import static google.registry.util.DateTimeUtils.minusHours;
 import static google.registry.util.DateTimeUtils.plusHours;
 import static org.joda.money.CurrencyUnit.JPY;
 import static org.joda.money.CurrencyUnit.USD;
-import static org.joda.time.DateTimeZone.UTC;
 import static org.joda.time.Duration.standardMinutes;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -45,7 +44,6 @@ import google.registry.persistence.transaction.JpaTestExtensions.JpaIntegrationT
 import google.registry.testing.DatabaseHelper;
 import google.registry.testing.FakeClock;
 import java.time.Instant;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,7 +64,7 @@ public class SyncRegistrarsSheetTest {
   @Captor private ArgumentCaptor<ImmutableList<ImmutableMap<String, String>>> rowsCaptor;
   @Mock private SheetSynchronizer sheetSynchronizer;
 
-  private final FakeClock clock = new FakeClock(DateTime.now(UTC));
+  private final FakeClock clock = new FakeClock(Instant.now());
 
   private SyncRegistrarsSheet newSyncRegistrarsSheet() {
     SyncRegistrarsSheet result = new SyncRegistrarsSheet();

@@ -47,8 +47,6 @@ import java.time.Instant;
 import java.util.List;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.TupleTransformer;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 /**
  * An action that exports the list of active domains on all real TLDs to Google Drive and GCS.
@@ -176,7 +174,7 @@ public class ExportDomainListsAction implements Runnable {
     public String transformTuple(Object[] domainResult, String[] strings) {
       String domainName = (String) domainResult[0];
       Instant deletionInstant = (Instant) domainResult[1];
-      DateTime deletionTime = new DateTime(deletionInstant.toEpochMilli(), DateTimeZone.UTC);
+      Instant deletionTime = deletionInstant;
       String[] domainStatuses = (String[]) domainResult[2];
       String gracePeriodType = (String) domainResult[3];
       boolean inPendingDelete =
