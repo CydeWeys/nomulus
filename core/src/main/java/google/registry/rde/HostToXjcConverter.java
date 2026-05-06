@@ -32,7 +32,7 @@ import java.net.InetAddress;
 import java.time.Instant;
 
 /** Utility class that turns a {@link Host} resource into {@link XjcRdeHostElement}. */
-final class HostToXjcConverter {
+class HostToXjcConverter {
 
   /** Converts a subordinate {@link Host} to {@link XjcRdeHostElement}. */
   static XjcRdeHostElement convertSubordinate(Host host, Domain superordinateDomain) {

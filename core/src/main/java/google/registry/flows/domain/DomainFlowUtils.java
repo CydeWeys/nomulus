@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.flows.domain;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -44,7 +45,6 @@ import static google.registry.util.DateTimeUtils.END_INSTANT;
 import static google.registry.util.DateTimeUtils.isAtOrAfter;
 import static google.registry.util.DateTimeUtils.minusDays;
 import static google.registry.util.DomainNameUtils.ACE_PREFIX;
-import static java.time.ZoneOffset.UTC;
 import static java.util.stream.Collectors.joining;
 
 import com.google.common.base.CharMatcher;
@@ -724,7 +724,7 @@ public class DomainFlowUtils {
    * domain names.
    */
   public static void validateFeeChallenge(
-      final Optional<? extends FeeTransformCommandExtension> feeCommand,
+      Optional<? extends FeeTransformCommandExtension> feeCommand,
       FeesAndCredits feesAndCredits,
       boolean defaultTokenUsed)
       throws EppException {
@@ -742,7 +742,7 @@ public class DomainFlowUtils {
    * do have implicit costs, e.g. creates and renews.
    */
   public static void validateFeesAckedIfPresent(
-      final Optional<? extends FeeTransformCommandExtension> feeCommand,
+      Optional<? extends FeeTransformCommandExtension> feeCommand,
       FeesAndCredits feesAndCredits,
       boolean defaultTokenUsed)
       throws EppException {
@@ -1067,7 +1067,7 @@ public class DomainFlowUtils {
       Domain domain,
       Instant now,
       Duration maxSearchPeriod,
-      final ImmutableSet<TransactionReportField> cancelableFields) {
+      ImmutableSet<TransactionReportField> cancelableFields) {
 
     List<DomainHistory> recentHistoryEntries =
         findRecentHistoryEntries(domain, now, maxSearchPeriod);

@@ -51,7 +51,7 @@ public final class DnsInjectionTest {
   private DnsTestComponent component;
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @BeforeEach

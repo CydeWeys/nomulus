@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.testing;
+import org.joda.time.DateTimeZone;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -47,7 +48,6 @@ import static google.registry.util.PreconditionsUtils.checkArgumentPresent;
 import static google.registry.util.ResourceUtils.readResourceUtf8;
 import static java.util.Arrays.asList;
 import static org.joda.money.CurrencyUnit.USD;
-import static org.joda.time.DateTimeZone.UTC;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
@@ -321,7 +321,7 @@ public final class DatabaseHelper {
         new ReservedList.Builder()
             .setName(listName)
             .setReservedListMapFromLines(ImmutableList.copyOf(lines))
-            .setCreationTimestamp(DateTime.now(UTC))
+            .setCreationTimestamp(DateTime.now(DateTimeZone.UTC))
             .build();
     return persistReservedList(reservedList);
   }
@@ -342,7 +342,7 @@ public final class DatabaseHelper {
     PremiumList premiumList =
         partialPremiumList
             .asBuilder()
-            .setCreationTimestamp(DateTime.now(UTC))
+            .setCreationTimestamp(DateTime.now(DateTimeZone.UTC))
             .setCurrency(currencyUnit)
             .setLabelsToPrices(
                 entries.entrySet().stream()
@@ -938,7 +938,7 @@ public final class DatabaseHelper {
   }
 
   /** Persists an object in the DB for tests. */
-  public static <R extends ImmutableObject> R persistResource(final R resource) {
+  public static <R extends ImmutableObject> R persistResource(R resource) {
     assertWithMessage("Attempting to persist a Builder is almost certainly an error in test code")
         .that(resource)
         .isNotInstanceOf(Buildable.Builder.class);
@@ -954,7 +954,7 @@ public final class DatabaseHelper {
 
   /** Persists the specified resources to the DB. */
   public static <R extends ImmutableObject> ImmutableList<R> persistResources(
-      final Iterable<R> resources) {
+      Iterable<R> resources) {
     for (R resource : resources) {
       assertWithMessage("Attempting to persist a Builder is almost certainly an error in test code")
           .that(resource)
@@ -972,7 +972,7 @@ public final class DatabaseHelper {
    *
    * @see #persistResource(ImmutableObject)
    */
-  public static <R extends EppResource> R persistEppResource(final R resource) {
+  public static <R extends EppResource> R persistEppResource(R resource) {
     checkState(!tm().inTransaction());
     tm().transact(
             () -> {
@@ -1114,7 +1114,7 @@ public final class DatabaseHelper {
             .build());
   }
 
-  public static void deleteResource(final Object resource) {
+  public static void deleteResource(Object resource) {
     tm().transact(() -> tm().delete(resource));
   }
 
@@ -1123,7 +1123,7 @@ public final class DatabaseHelper {
   }
 
   /** Force the create and update timestamps to get written into the resource. */
-  public static <R> R cloneAndSetAutoTimestamps(final R resource) {
+  public static <R> R cloneAndSetAutoTimestamps(R resource) {
     // We have to separate the read and write operation into different transactions otherwise JPA
     // would just return the input entity instead of actually creating a clone.
     tm().transact(() -> tm().put(resource));

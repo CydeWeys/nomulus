@@ -13,13 +13,13 @@
 // limitations under the License.
 
 package google.registry.rde;
+import static java.time.ZoneOffset.UTC;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
 import static google.registry.util.DateTimeUtils.isBeforeOrAt;
 import static google.registry.util.DateTimeUtils.plusDays;
-import static java.time.ZoneOffset.UTC;
-import static java.time.temporal.ChronoUnit.DAYS;
 
 import com.google.common.collect.ImmutableSetMultimap;
 import google.registry.config.RegistryConfig.Config;

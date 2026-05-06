@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.model.domain;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static com.google.common.collect.Iterables.getOnlyElement;
@@ -35,7 +36,6 @@ import static google.registry.util.DateTimeUtils.minusDays;
 import static google.registry.util.DateTimeUtils.plusDays;
 import static google.registry.util.DateTimeUtils.plusYears;
 import static google.registry.util.DateTimeUtils.toInstant;
-import static java.time.ZoneOffset.UTC;
 import static org.joda.money.CurrencyUnit.USD;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -88,7 +88,7 @@ public class DomainTest {
   protected FakeClock fakeClock = new FakeClock(DateTime.now(DateTimeZone.UTC));
 
   @RegisterExtension
-  final JpaIntegrationWithCoverageExtension jpa =
+  JpaIntegrationWithCoverageExtension jpa =
       new JpaTestExtensions.Builder().withClock(fakeClock).buildIntegrationWithCoverageExtension();
 
   private Domain domain;

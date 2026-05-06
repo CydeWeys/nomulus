@@ -92,7 +92,7 @@ class NordnUploadActionTest {
   private final CloudTasksUtils cloudTasksUtils = cloudTasksHelper.getTestCloudTasksUtils();
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   private final LordnRequestInitializer lordnRequestInitializer =

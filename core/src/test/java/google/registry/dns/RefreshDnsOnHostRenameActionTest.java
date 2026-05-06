@@ -45,7 +45,7 @@ public class RefreshDnsOnHostRenameActionTest {
   private final FakeResponse response = new FakeResponse();
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   private RefreshDnsOnHostRenameAction action;

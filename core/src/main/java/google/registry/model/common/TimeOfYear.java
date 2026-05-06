@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.model.common;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.collect.DiscreteDomain.integers;
 import static com.google.common.collect.ImmutableList.toImmutableList;
@@ -22,7 +23,6 @@ import static google.registry.util.DateTimeUtils.isAtOrAfter;
 import static google.registry.util.DateTimeUtils.isBeforeOrAt;
 import static google.registry.util.DateTimeUtils.minusYears;
 import static google.registry.util.DateTimeUtils.plusYears;
-import static java.time.ZoneOffset.UTC;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ContiguousSet;

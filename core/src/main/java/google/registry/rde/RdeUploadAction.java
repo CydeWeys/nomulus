@@ -173,17 +173,17 @@ public final class RdeUploadAction implements Runnable, EscrowTask {
         RdeRevision.getCurrentRevision(tld, watermark, FULL)
             .orElseThrow(
                 () -> new IllegalStateException("RdeRevision was not set on generated deposit"));
-    final String nameWithoutPrefix =
+    String nameWithoutPrefix =
         RdeNamingUtils.makeRydeFilename(tld, watermark, FULL, 1, revision);
-    final String name = actualPrefix + nameWithoutPrefix;
-    final BlobId xmlFilename = BlobId.of(bucket, name + ".xml.ghostryde");
-    final BlobId xmlLengthFilename = BlobId.of(bucket, name + ".xml.length");
+    String name = actualPrefix + nameWithoutPrefix;
+    BlobId xmlFilename = BlobId.of(bucket, name + ".xml.ghostryde");
+    BlobId xmlLengthFilename = BlobId.of(bucket, name + ".xml.length");
     BlobId reportFilename = BlobId.of(bucket, name + "-report.xml.ghostryde");
     verifyFileExists(xmlFilename);
     verifyFileExists(xmlLengthFilename);
     verifyFileExists(reportFilename);
     logger.atInfo().log("Commencing RDE upload for TLD '%s' to '%s'.", tld, uploadUrl);
-    final long xmlLength = readXmlLength(xmlLengthFilename);
+    long xmlLength = readXmlLength(xmlLengthFilename);
     retrier.callWithRetry(
         () -> upload(xmlFilename, xmlLength, watermark, name, nameWithoutPrefix),
         JSchException.class);

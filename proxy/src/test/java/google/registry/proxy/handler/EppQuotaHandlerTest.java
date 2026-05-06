@@ -13,11 +13,12 @@
 // limitations under the License.
 
 package google.registry.proxy.handler;
+import static google.registry.util.DateTimeUtils.toDateTime;
+import static java.time.temporal.ChronoUnit.MILLIS;
 
 import static com.google.common.truth.Truth.assertThat;
 import static google.registry.proxy.Protocol.PROTOCOL_KEY;
 import static google.registry.proxy.handler.EppServiceHandler.CLIENT_CERTIFICATE_HASH_KEY;
-import static org.joda.time.DateTimeZone.UTC;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -36,8 +37,8 @@ import google.registry.proxy.quota.QuotaManager.QuotaResponse;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.embedded.EmbeddedChannel;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
+import java.time.Instant;
+import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +50,7 @@ class EppQuotaHandlerTest {
   private final EppQuotaHandler handler = new EppQuotaHandler(quotaManager, metrics);
   private final EmbeddedChannel channel = new EmbeddedChannel(handler);
   private final String clientCertHash = "blah/123!";
-  private final DateTime now = DateTime.now(UTC);
+  private final Instant now = Instant.now().truncatedTo(MILLIS);
   private final Object message = new Object();
 
   private void setProtocol(Channel channel) {
@@ -79,7 +80,7 @@ class EppQuotaHandlerTest {
   @Test
   void testSuccess_quotaGrantedAndReturned() {
     when(quotaManager.acquireQuota(new QuotaRequest(clientCertHash)))
-        .thenReturn(new QuotaResponse(true, clientCertHash, now));
+        .thenReturn(new QuotaResponse(true, clientCertHash, toDateTime(now)));
 
     // First read, acquire quota.
     assertThat(channel.writeInbound(message)).isTrue();
@@ -96,14 +97,14 @@ class EppQuotaHandlerTest {
     // Channel closed, release quota.
     ChannelFuture unusedFuture = channel.close();
     verify(quotaManager)
-        .releaseQuota(QuotaRebate.create(new QuotaResponse(true, clientCertHash, now)));
+        .releaseQuota(QuotaRebate.create(new QuotaResponse(true, clientCertHash, toDateTime(now))));
     verifyNoMoreInteractions(quotaManager);
   }
 
   @Test
   void testFailure_quotaNotGranted() {
     when(quotaManager.acquireQuota(new QuotaRequest(clientCertHash)))
-        .thenReturn(new QuotaResponse(false, clientCertHash, now));
+        .thenReturn(new QuotaResponse(false, clientCertHash, toDateTime(now)));
     OverQuotaException e =
         assertThrows(OverQuotaException.class, () -> channel.writeInbound(message));
     ChannelFuture unusedFuture = channel.close();
@@ -118,17 +119,17 @@ class EppQuotaHandlerTest {
   @Test
   void testSuccess_twoChannels_twoUserIds() {
     // Set up another user.
-    final EppQuotaHandler otherHandler = new EppQuotaHandler(quotaManager, metrics);
-    final EmbeddedChannel otherChannel = new EmbeddedChannel(otherHandler);
-    final String otherClientCertHash = "hola@9x";
+    EppQuotaHandler otherHandler = new EppQuotaHandler(quotaManager, metrics);
+    EmbeddedChannel otherChannel = new EmbeddedChannel(otherHandler);
+    String otherClientCertHash = "hola@9x";
     otherChannel.attr(CLIENT_CERTIFICATE_HASH_KEY).set(otherClientCertHash);
     setProtocol(otherChannel);
-    final DateTime later = now.plus(Duration.standardSeconds(1));
+    Instant later = now.plus(Duration.ofSeconds(1));
 
     when(quotaManager.acquireQuota(new QuotaRequest(clientCertHash)))
-        .thenReturn(new QuotaResponse(true, clientCertHash, now));
+        .thenReturn(new QuotaResponse(true, clientCertHash, toDateTime(now)));
     when(quotaManager.acquireQuota(new QuotaRequest(otherClientCertHash)))
-        .thenReturn(new QuotaResponse(false, otherClientCertHash, later));
+        .thenReturn(new QuotaResponse(false, otherClientCertHash, toDateTime(later)));
 
     // Allows the first user.
     assertThat(channel.writeInbound(message)).isTrue();
@@ -146,15 +147,15 @@ class EppQuotaHandlerTest {
   @Test
   void testSuccess_twoChannels_sameUserIds() {
     // Set up another channel for the same user.
-    final EppQuotaHandler otherHandler = new EppQuotaHandler(quotaManager, metrics);
-    final EmbeddedChannel otherChannel = new EmbeddedChannel(otherHandler);
+    EppQuotaHandler otherHandler = new EppQuotaHandler(quotaManager, metrics);
+    EmbeddedChannel otherChannel = new EmbeddedChannel(otherHandler);
     otherChannel.attr(CLIENT_CERTIFICATE_HASH_KEY).set(clientCertHash);
     setProtocol(otherChannel);
-    final DateTime later = now.plus(Duration.standardSeconds(1));
+    Instant later = now.plus(Duration.ofSeconds(1));
 
     when(quotaManager.acquireQuota(new QuotaRequest(clientCertHash)))
-        .thenReturn(new QuotaResponse(true, clientCertHash, now))
-        .thenReturn(new QuotaResponse(false, clientCertHash, later));
+        .thenReturn(new QuotaResponse(true, clientCertHash, toDateTime(now)))
+        .thenReturn(new QuotaResponse(false, clientCertHash, toDateTime(later)));
 
     // Allows the first channel.
     assertThat(channel.writeInbound(message)).isTrue();

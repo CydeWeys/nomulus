@@ -128,7 +128,7 @@ public class RdeUploadActionTest {
           RdeTestData.loadBytes("pgp-private-keyring-escrow.asc"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final PGPPublicKey encryptKey =

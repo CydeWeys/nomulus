@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.flows.domain;
+import static java.time.ZoneOffset.UTC;
 
 import static google.registry.dns.DnsUtils.requestDomainDnsRefresh;
 import static google.registry.flows.FlowUtils.createHistoryEntryId;
@@ -31,7 +32,6 @@ import static google.registry.flows.domain.DomainFlowUtils.verifyRegistrarIsActi
 import static google.registry.model.reporting.HistoryEntry.Type.DOMAIN_RESTORE;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
 import static google.registry.util.DateTimeUtils.END_INSTANT;
-import static java.time.ZoneOffset.UTC;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

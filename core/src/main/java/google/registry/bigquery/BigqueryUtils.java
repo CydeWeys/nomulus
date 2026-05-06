@@ -13,9 +13,9 @@
 // limitations under the License.
 
 package google.registry.bigquery;
-
 import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.MICROS;
+
 
 import com.google.api.services.bigquery.model.JobReference;
 import java.time.Instant;

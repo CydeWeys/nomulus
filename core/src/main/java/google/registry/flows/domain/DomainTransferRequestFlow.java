@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.flows.domain;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static google.registry.flows.FlowUtils.createHistoryEntryId;
 import static google.registry.flows.FlowUtils.validateRegistrarIsLoggedIn;
@@ -35,7 +36,6 @@ import static google.registry.flows.domain.DomainTransferUtils.createTransferSer
 import static google.registry.model.eppoutput.Result.Code.SUCCESS_WITH_ACTION_PENDING;
 import static google.registry.model.reporting.HistoryEntry.Type.DOMAIN_TRANSFER_REQUEST;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
-import static java.time.temporal.ChronoUnit.DAYS;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

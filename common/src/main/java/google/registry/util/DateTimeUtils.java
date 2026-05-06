@@ -15,22 +15,23 @@
 package google.registry.util;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.joda.time.DateTimeZone.UTC;
+import static java.time.ZoneOffset.UTC;
+import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import java.sql.Date;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import javax.annotation.Nullable;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.ReadableDuration;
 
@@ -38,7 +39,7 @@ import org.joda.time.ReadableDuration;
 public abstract class DateTimeUtils {
 
   /** The start of the epoch, in a convenient constant. */
-  @Deprecated public static final DateTime START_OF_TIME = new DateTime(0, UTC);
+  @Deprecated public static final DateTime START_OF_TIME = new DateTime(0, DateTimeZone.UTC);
 
   /** The start of the UNIX epoch (which is defined in UTC), in a convenient constant. */
   public static final Instant START_INSTANT = Instant.ofEpochMilli(0);
@@ -50,7 +51,8 @@ public abstract class DateTimeUtils {
    * but Java uses milliseconds, so this is the largest representable date that will survive a
    * round-trip through the database.
    */
-  @Deprecated public static final DateTime END_OF_TIME = new DateTime(Long.MAX_VALUE / 1000, UTC);
+  @Deprecated
+  public static final DateTime END_OF_TIME = new DateTime(Long.MAX_VALUE / 1000, DateTimeZone.UTC);
 
   /**
    * An instant in the far future that we can treat as infinity.
@@ -74,11 +76,11 @@ public abstract class DateTimeUtils {
           .appendValue(ChronoField.YEAR, 4, 10, SignStyle.NORMAL)
           .appendPattern("-MM-dd'T'HH:mm:ss.SSS'Z'")
           .toFormatter()
-          .withZone(ZoneOffset.UTC);
+          .withZone(UTC);
 
   /** A formatter that produces lowercase, filename-safe and job-name-safe timestamps. */
   public static final DateTimeFormatter LOWERCASE_TIMESTAMP_FORMATTER =
-      DateTimeFormatter.ofPattern("yyyy-MM-dd't'HH-mm-ss'z'").withZone(ZoneOffset.UTC);
+      DateTimeFormatter.ofPattern("yyyy-MM-dd't'HH-mm-ss'z'").withZone(UTC);
 
   /** Formats an {@link Instant} to an ISO-8601 string. */
   public static String formatInstant(Instant instant) {
@@ -193,21 +195,19 @@ public abstract class DateTimeUtils {
    */
   public static Instant plusYears(Instant now, int years) {
     checkArgument(years >= 0);
-    return (years == 0)
-        ? now
-        : now.atZone(ZoneOffset.UTC).plusYears(1).plusYears(years - 1).toInstant();
+    return (years == 0) ? now : now.atZone(UTC).plusYears(1).plusYears(years - 1).toInstant();
   }
 
   /** Adds months to a date. */
   public static Instant plusMonths(Instant now, int months) {
     checkArgument(months >= 0);
-    return now.atZone(ZoneOffset.UTC).plusMonths(months).toInstant();
+    return now.atZone(UTC).plusMonths(months).toInstant();
   }
 
   /** Subtracts months from a date. */
   public static Instant minusMonths(Instant now, int months) {
     checkArgument(months >= 0);
-    return now.atZone(ZoneOffset.UTC).minusMonths(months).toInstant();
+    return now.atZone(UTC).minusMonths(months).toInstant();
   }
 
   /**
@@ -225,9 +225,7 @@ public abstract class DateTimeUtils {
    */
   public static Instant minusYears(Instant now, long years) {
     checkArgument(years >= 0);
-    return (years == 0)
-        ? now
-        : now.atZone(ZoneOffset.UTC).minusYears(1).minusYears(years - 1).toInstant();
+    return (years == 0) ? now : now.atZone(UTC).minusYears(1).minusYears(years - 1).toInstant();
   }
 
   /**
@@ -253,7 +251,7 @@ public abstract class DateTimeUtils {
   }
 
   public static LocalDate toLocalDate(Date date) {
-    return new LocalDate(date.getTime(), UTC);
+    return new LocalDate(date.getTime(), DateTimeZone.UTC);
   }
 
   /** Converts a java.time.LocalDate to a Joda-Time LocalDate. */
@@ -263,7 +261,7 @@ public abstract class DateTimeUtils {
 
   /** Converts an Instant to a Joda-Time LocalDate in UTC. */
   public static LocalDate toJodaLocalDate(Instant instant) {
-    return new LocalDate(instant.toEpochMilli(), UTC);
+    return new LocalDate(instant.toEpochMilli(), DateTimeZone.UTC);
   }
 
   /** Convert a joda {@link DateTime} to a java.time {@link Instant}, null-safe. */
@@ -275,7 +273,7 @@ public abstract class DateTimeUtils {
   /** Convert a java.time {@link Instant} to a joda {@link DateTime}, null-safe. */
   @Nullable
   public static DateTime toDateTime(@Nullable Instant instant) {
-    return (instant == null) ? null : new DateTime(instant.toEpochMilli(), UTC);
+    return (instant == null) ? null : new DateTime(instant.toEpochMilli(), DateTimeZone.UTC);
   }
 
   /** Convert a java.time {@link java.time.Instant} to a joda {@link org.joda.time.Instant}. */
@@ -285,26 +283,26 @@ public abstract class DateTimeUtils {
   }
 
   public static Instant plusHours(Instant instant, long hours) {
-    return instant.plus(hours, ChronoUnit.HOURS);
+    return instant.plus(hours, HOURS);
   }
 
   public static Instant minusHours(Instant instant, long hours) {
-    return instant.minus(hours, ChronoUnit.HOURS);
+    return instant.minus(hours, HOURS);
   }
 
   public static Instant plusMinutes(Instant instant, long minutes) {
-    return instant.plus(minutes, ChronoUnit.MINUTES);
+    return instant.plus(minutes, MINUTES);
   }
 
   public static Instant minusMinutes(Instant instant, long minutes) {
-    return instant.minus(minutes, ChronoUnit.MINUTES);
+    return instant.minus(minutes, MINUTES);
   }
 
   public static Instant plusDays(Instant instant, int days) {
-    return instant.atZone(ZoneOffset.UTC).plusDays(days).toInstant();
+    return instant.atZone(UTC).plusDays(days).toInstant();
   }
 
   public static Instant minusDays(Instant instant, int days) {
-    return instant.atZone(ZoneOffset.UTC).minusDays(days).toInstant();
+    return instant.atZone(UTC).minusDays(days).toInstant();
   }
 }

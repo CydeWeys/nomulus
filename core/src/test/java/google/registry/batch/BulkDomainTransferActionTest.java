@@ -51,7 +51,7 @@ public class BulkDomainTransferActionTest {
   private final FakeClock fakeClock = new FakeClock(Instant.parse("2024-01-01T00:00:00.000Z"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(fakeClock).buildIntegrationTestExtension();
 
   private final FakeResponse response = new FakeResponse();

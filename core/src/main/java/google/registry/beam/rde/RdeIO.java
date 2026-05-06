@@ -161,10 +161,10 @@ public class RdeIO {
       RdeCounter counter = new RdeCounter();
 
       // Determine some basic things about the deposit.
-      final RdeMode mode = key.mode();
-      final String tld = key.tld();
-      final Instant watermark = key.watermark();
-      final int revision =
+      RdeMode mode = key.mode();
+      String tld = key.tld();
+      Instant watermark = key.watermark();
+      int revision =
           Optional.ofNullable(key.revision())
               .orElseGet(() -> RdeRevision.getNextRevision(tld, watermark, mode));
       String id = RdeUtils.timestampToId(watermark);

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.model.rde;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static com.google.common.truth.Truth.assertThat;
 import static google.registry.model.rde.RdeMode.FULL;
@@ -20,7 +21,6 @@ import static google.registry.model.rde.RdeRevision.getNextRevision;
 import static google.registry.model.rde.RdeRevision.saveRevision;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
 import static google.registry.util.DateTimeUtils.toJodaLocalDate;
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import google.registry.model.EntityTestCase;

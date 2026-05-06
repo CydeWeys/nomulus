@@ -13,13 +13,13 @@
 // limitations under the License.
 
 package google.registry.batch;
+import static google.registry.util.DateTimeUtils.toJodaDuration;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
 import static google.registry.request.Action.Method.POST;
 import static google.registry.tools.LockOrUnlockDomainCommand.REGISTRY_LOCK_STATUSES;
 import static google.registry.util.DateTimeUtils.isAtOrAfter;
-import static google.registry.util.DateTimeUtils.toJodaDuration;
 import static jakarta.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 

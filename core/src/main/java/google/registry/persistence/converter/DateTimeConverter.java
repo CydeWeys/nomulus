@@ -13,15 +13,15 @@
 // limitations under the License.
 
 package google.registry.persistence.converter;
-import static org.joda.time.DateTimeZone.UTC;
+import static google.registry.util.DateTimeUtils.toInstant;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import javax.annotation.Nullable;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 /** JPA converter to for storing/retrieving {@link org.joda.time.DateTime} objects. */
 @Converter(autoApply = true)
@@ -32,12 +32,12 @@ public class DateTimeConverter implements AttributeConverter<DateTime, ZonedDate
   public ZonedDateTime convertToDatabaseColumn(@Nullable DateTime attribute) {
     return attribute == null
         ? null
-        : ZonedDateTime.ofInstant(Instant.ofEpochMilli(attribute.getMillis()), ZoneOffset.UTC);
+        : ZonedDateTime.ofInstant(toInstant(attribute), ZoneOffset.UTC);
   }
 
   @Override
   @Nullable
   public DateTime convertToEntityAttribute(@Nullable ZonedDateTime dbData) {
-    return (dbData == null) ? null : new DateTime(dbData.toInstant().toEpochMilli(), UTC);
+    return (dbData == null) ? null : new DateTime(dbData.toInstant().toEpochMilli(), DateTimeZone.UTC);
   }
 }

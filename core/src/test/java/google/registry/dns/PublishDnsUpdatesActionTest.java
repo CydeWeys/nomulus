@@ -77,7 +77,7 @@ import org.mockito.ArgumentCaptor;
 public class PublishDnsUpdatesActionTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final FakeClock clock = new FakeClock(Instant.parse("1971-01-01T00:00:00Z"));

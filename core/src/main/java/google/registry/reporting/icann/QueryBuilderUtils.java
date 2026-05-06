@@ -20,7 +20,7 @@ import java.net.URL;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
-final class QueryBuilderUtils {
+class QueryBuilderUtils {
 
   private QueryBuilderUtils() {}
 

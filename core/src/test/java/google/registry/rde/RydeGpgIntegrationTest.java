@@ -75,7 +75,7 @@ public class RydeGpgIntegrationTest {
   @ParameterizedTest
   @MethodSource("provideTestCombinations")
   void test(String content) throws Exception {
-    final String filename = "sloth";
+    String filename = "sloth";
     assumeTrue(hasCommand("tar"));
     assumeTrue(hasCommand(GPG_BINARY + " --version"));
 

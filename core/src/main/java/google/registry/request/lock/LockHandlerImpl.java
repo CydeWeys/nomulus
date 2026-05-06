@@ -66,7 +66,7 @@ public class LockHandlerImpl implements LockHandler {
    */
   @Override
   public boolean executeWithLocks(
-      final Callable<Void> callable,
+      Callable<Void> callable,
       @Nullable String tld,
       Duration leaseLength,
       String... lockNames) {
@@ -74,7 +74,7 @@ public class LockHandlerImpl implements LockHandler {
   }
 
   private boolean executeWithLockAcquirer(
-      final Callable<Void> callable,
+      Callable<Void> callable,
       @Nullable String tld,
       Duration leaseLength,
       LockAcquirer lockAcquirer,
@@ -120,11 +120,11 @@ public class LockHandlerImpl implements LockHandler {
 
   /** A {@link Callable} that acquires and releases a lock around a delegate {@link Callable}. */
   private static class LockingCallable implements Callable<Boolean> {
-    final Callable<Void> delegate;
-    final LockAcquirer lockAcquirer;
+    Callable<Void> delegate;
+    LockAcquirer lockAcquirer;
     @Nullable final String tld;
-    final Duration leaseLength;
-    final Set<String> lockNames;
+    Duration leaseLength;
+    Set<String> lockNames;
 
     LockingCallable(
         Callable<Void> delegate,

@@ -31,7 +31,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.WillNotClose;
 
 /** Single-file POSIX tar archive creator that wraps an {@link OutputStream}. */
-final class RydeTar {
+class RydeTar {
 
   /**
    * Creates a new {@link ImprovedOutputStream} that creates a tar archive with a single file.

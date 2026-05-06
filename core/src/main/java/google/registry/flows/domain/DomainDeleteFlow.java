@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.flows.domain;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -42,7 +43,6 @@ import static google.registry.util.CollectionUtils.nullToEmpty;
 import static google.registry.util.CollectionUtils.union;
 import static google.registry.util.DateTimeUtils.toDateTime;
 import static google.registry.util.DateTimeUtils.toInstant;
-import static java.time.ZoneOffset.UTC;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.tools.server;
+import org.joda.time.DateTimeZone;
 
 import static com.google.common.truth.Truth.assertThat;
 import static google.registry.testing.DatabaseHelper.createTlds;
@@ -23,7 +24,6 @@ import static google.registry.testing.DatabaseHelper.persistResource;
 import static google.registry.testing.TestDataHelper.loadFile;
 import static google.registry.util.DateTimeUtils.toInstant;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.joda.time.DateTimeZone.UTC;
 
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.contrib.nio.testing.LocalStorageHelper;
@@ -78,7 +78,7 @@ class GenerateZoneFilesActionTest {
 
   @SuppressWarnings("AddressSelection")
   void testGenerate(String goldenFileName) throws Exception {
-    DateTime now = DateTime.now(UTC).withTimeAtStartOfDay();
+    DateTime now = DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay();
 
     ImmutableSet<InetAddress> ips =
         ImmutableSet.of(InetAddress.getByName("127.0.0.1"), InetAddress.getByName("::1"));

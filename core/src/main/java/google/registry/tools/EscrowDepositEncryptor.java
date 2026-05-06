@@ -37,7 +37,7 @@ import org.bouncycastle.openpgp.PGPKeyPair;
 import org.bouncycastle.openpgp.PGPPublicKey;
 
 /** Utility for encrypting an RDE RyDE deposit on the Java 7 NIO file system. */
-final class EscrowDepositEncryptor {
+class EscrowDepositEncryptor {
 
   private static final int PEEK_BUFFER_SIZE = 64 * 1024;
 

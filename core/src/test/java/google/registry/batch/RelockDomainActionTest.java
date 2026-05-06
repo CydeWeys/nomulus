@@ -80,7 +80,7 @@ public class RelockDomainActionTest {
           cloudTasksHelper.getTestCloudTasksUtils());
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private Domain domain;

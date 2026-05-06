@@ -60,7 +60,7 @@ public class SyncRegistrarsSheetTest {
   private final FakeClock clock = new FakeClock(Instant.parse("2024-01-01T00:00:00Z"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @Captor private ArgumentCaptor<ImmutableList<ImmutableMap<String, String>>> rowsCaptor;

@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link LockHandler}. */
-final class LockHandlerImplTest {
+class LockHandlerImplTest {
 
   private static final Duration ONE_DAY = Duration.ofDays(1);
 

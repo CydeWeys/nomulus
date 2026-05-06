@@ -13,6 +13,9 @@
 // limitations under the License.
 
 package google.registry.beam.billing;
+import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
@@ -36,9 +39,6 @@ import static google.registry.util.DateTimeUtils.plusDays;
 import static google.registry.util.DateTimeUtils.plusYears;
 import static google.registry.util.DateTimeUtils.toDateTime;
 import static google.registry.util.DateTimeUtils.toInstant;
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.time.temporal.ChronoUnit.HOURS;
-import static java.time.temporal.ChronoUnit.MILLIS;
 import static org.joda.money.CurrencyUnit.USD;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -95,7 +95,7 @@ public class ExpandBillingRecurrencesPipelineTest {
   private final TestOptions options = PipelineOptionsFactory.create().as(TestOptions.class);
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder()
           .withClock(clock)
           .withProperty(
@@ -104,7 +104,7 @@ public class ExpandBillingRecurrencesPipelineTest {
           .buildIntegrationTestExtension();
 
   @RegisterExtension
-  final TestPipelineExtension pipeline =
+  TestPipelineExtension pipeline =
       TestPipelineExtension.create().enableAbandonedNodeEnforcement(true);
 
   @BeforeEach

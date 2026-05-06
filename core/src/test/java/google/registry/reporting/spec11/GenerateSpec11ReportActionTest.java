@@ -13,10 +13,10 @@
 // limitations under the License.
 
 package google.registry.reporting.spec11;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.truth.Truth.assertThat;
 import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-import static java.time.ZoneOffset.UTC;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.mockito.Mockito.when;
 

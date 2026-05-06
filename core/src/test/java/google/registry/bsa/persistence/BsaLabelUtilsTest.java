@@ -43,7 +43,7 @@ public class BsaLabelUtilsTest {
   protected FakeClock fakeClock = new FakeClock(Instant.parse("2024-01-01T00:00:00Z"));
 
   @RegisterExtension
-  final JpaIntegrationWithCoverageExtension jpa =
+  JpaIntegrationWithCoverageExtension jpa =
       new JpaTestExtensions.Builder().withClock(fakeClock).buildIntegrationWithCoverageExtension();
 
   @Test

@@ -77,7 +77,7 @@ public class RdeReportActionTest {
   public final BouncyCastleProviderExtension bouncy = new BouncyCastleProviderExtension();
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final FakeResponse response = new FakeResponse();

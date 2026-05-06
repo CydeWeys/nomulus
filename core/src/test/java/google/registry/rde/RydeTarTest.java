@@ -25,7 +25,7 @@ import java.time.Instant;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link RydeTar}. */
-final class RydeTarTest {
+class RydeTarTest {
 
   @Test
   void testWriteRead() throws Exception {

@@ -44,7 +44,7 @@ import org.junitpioneer.jupiter.cartesian.CartesianTest.Values;
 class TmchXmlSignatureTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   // This should be a date which falls within the validity range of the test files contained in the

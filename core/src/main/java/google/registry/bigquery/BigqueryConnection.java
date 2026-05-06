@@ -347,7 +347,7 @@ public class BigqueryConnection implements AutoCloseable {
    * Futures.transform() to update a table produced as the asynchronous result of a load or query
    * job (e.g. to add a description to it).
    */
-  private DestinationTable updateTable(final DestinationTable destinationTable) {
+  private DestinationTable updateTable(DestinationTable destinationTable) {
     Table table = destinationTable.getTable();
     TableReference ref = table.getTableReference();
     try {
@@ -508,9 +508,9 @@ public class BigqueryConnection implements AutoCloseable {
    */
   public ListenableFuture<String> extractQuery(
       String querySql,
-      final String destinationUri,
-      final DestinationFormat destinationFormat,
-      final boolean printHeader) {
+      String destinationUri,
+      DestinationFormat destinationFormat,
+      boolean printHeader) {
     // Note: although BigQuery queries save their results to an auto-generated anonymous table,
     // we can't rely on that for running the extract job because it may not be fully replicated.
     // Tracking bug for query-to-GCS support is b/13777340.
@@ -601,8 +601,8 @@ public class BigqueryConnection implements AutoCloseable {
 
   /** Runs job and returns a future that yields {@code result} when {@code job} is completed. */
   private <T> ListenableFuture<T> runJobToCompletion(
-      final Job job,
-      final T result,
+      Job job,
+      T result,
       @Nullable final AbstractInputStreamContent data) {
     return service.submit(
         () -> {

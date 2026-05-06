@@ -57,7 +57,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 class IcannReportingUploadActionTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private static final byte[] PAYLOAD_SUCCESS = "test,csv\n13,37".getBytes(UTF_8);

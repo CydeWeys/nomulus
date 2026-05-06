@@ -62,7 +62,7 @@ class SyncRemoteCacheActionTest {
   private final FakeClock clock = new FakeClock(DateTime.parse("2025-01-01T00:00:00Z"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @Mock private SimplifiedJedisClient<Domain> domainJedisClient;

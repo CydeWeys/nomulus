@@ -165,11 +165,11 @@ public class CloudTasksHelper implements Serializable {
   public void assertTasksEnqueued(String queueName, Collection<TaskMatcher> taskMatchers) {
     List<Task> tasks = getTestTasksFor(queueName);
     assertThat(tasks).hasSize(taskMatchers.size());
-    for (final TaskMatcher taskMatcher : taskMatchers) {
+    for (TaskMatcher taskMatcher : taskMatchers) {
       try {
         tasks.remove(tasks.stream().filter(taskMatcher).findFirst().get());
       } catch (NoSuchElementException e) {
-        final Map<String, Object> taskMatcherMap = taskMatcher.expected.toMap();
+        Map<String, Object> taskMatcherMap = taskMatcher.expected.toMap();
         assertWithMessage(
                 "Task not found in queue %s:\n\n%s\n\nPotential candidate match diffs:\n\n%s",
                 queueName,

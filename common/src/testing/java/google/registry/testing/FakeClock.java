@@ -15,7 +15,6 @@
 package google.registry.testing;
 
 import static google.registry.util.DateTimeUtils.START_OF_TIME;
-import static org.joda.time.DateTimeZone.UTC;
 import static org.joda.time.Duration.millis;
 
 import google.registry.util.Clock;
@@ -23,6 +22,7 @@ import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.concurrent.ThreadSafe;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Duration;
 import org.joda.time.ReadableDuration;
 import org.joda.time.ReadableInstant;
@@ -57,7 +57,7 @@ public final class FakeClock implements Clock {
   /** Returns the current time. */
   @Override
   public DateTime nowUtc() {
-    return new DateTime(currentTimeMillis.addAndGet(autoIncrementStepMs), UTC);
+    return new DateTime(currentTimeMillis.addAndGet(autoIncrementStepMs), DateTimeZone.UTC);
   }
 
   @Override

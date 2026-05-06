@@ -13,11 +13,11 @@
 // limitations under the License.
 
 package google.registry.reporting;
+import static java.time.ZoneOffset.UTC;
 
 import static google.registry.request.RequestParameters.extractOptionalBooleanParameter;
 import static google.registry.request.RequestParameters.extractOptionalParameter;
 import static google.registry.request.RequestParameters.extractRequiredParameter;
-import static java.time.ZoneOffset.UTC;
 
 import com.google.api.services.dataflow.Dataflow;
 import dagger.Module;

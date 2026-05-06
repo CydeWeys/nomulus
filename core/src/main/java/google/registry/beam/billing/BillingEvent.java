@@ -13,8 +13,8 @@
 // limitations under the License.
 
 package google.registry.beam.billing;
-
 import static java.time.ZoneOffset.UTC;
+
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;

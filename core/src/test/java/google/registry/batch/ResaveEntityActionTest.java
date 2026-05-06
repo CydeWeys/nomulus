@@ -56,7 +56,7 @@ import org.mockito.quality.Strictness;
 public class ResaveEntityActionTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   @Mock private Response response;

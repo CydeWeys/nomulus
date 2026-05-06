@@ -75,7 +75,7 @@ public class BrdaCopyActionTest {
   public final BouncyCastleProviderExtension bouncy = new BouncyCastleProviderExtension();
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   @RegisterExtension

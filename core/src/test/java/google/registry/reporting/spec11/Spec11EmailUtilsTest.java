@@ -100,7 +100,7 @@ class Spec11EmailUtilsTest {
           + " notice, please contact abuse@test.com.</p>";
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   @Mock private GmailClient gmailClient;

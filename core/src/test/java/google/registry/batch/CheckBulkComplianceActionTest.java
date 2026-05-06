@@ -69,7 +69,7 @@ public class CheckBulkComplianceActionTest {
   private static final String SUPPORT_EMAIL = "registry@test.com";
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   private CheckBulkComplianceAction action;

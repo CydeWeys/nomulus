@@ -13,11 +13,11 @@
 // limitations under the License.
 
 package google.registry.model.rde;
+import static java.time.ZoneOffset.UTC;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.time.ZoneOffset.UTC;
-import static java.time.temporal.ChronoUnit.DAYS;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;

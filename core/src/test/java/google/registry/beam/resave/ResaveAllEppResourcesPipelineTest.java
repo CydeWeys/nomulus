@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.beam.resave;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static com.google.common.truth.Truth.assertThat;
@@ -27,7 +28,6 @@ import static google.registry.testing.DatabaseHelper.persistDomainWithPendingTra
 import static google.registry.testing.DatabaseHelper.persistNewRegistrars;
 import static google.registry.util.DateTimeUtils.plusYears;
 import static google.registry.util.DateTimeUtils.toDateTime;
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -60,11 +60,11 @@ public class ResaveAllEppResourcesPipelineTest {
   private final FakeClock fakeClock = new FakeClock(DateTime.parse("2020-03-10T00:00:00.000Z"));
 
   @RegisterExtension
-  final TestPipelineExtension testPipeline =
+  TestPipelineExtension testPipeline =
       TestPipelineExtension.create().enableAbandonedNodeEnforcement(true);
 
   @RegisterExtension
-  final JpaIntegrationTestExtension database =
+  JpaIntegrationTestExtension database =
       new JpaTestExtensions.Builder()
           .withClock(fakeClock)
           .withProperty(

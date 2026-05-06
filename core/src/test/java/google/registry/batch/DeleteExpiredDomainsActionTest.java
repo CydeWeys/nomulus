@@ -59,7 +59,7 @@ class DeleteExpiredDomainsActionTest {
   private final FakeClock clock = new FakeClock(Instant.parse("2016-06-13T20:21:22Z"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   private final FakeResponse response = new FakeResponse();

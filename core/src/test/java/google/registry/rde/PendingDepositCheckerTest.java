@@ -43,7 +43,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 public class PendingDepositCheckerTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final FakeClock clock = new FakeClock();
@@ -189,11 +189,11 @@ public class PendingDepositCheckerTest {
                         Duration.ofDays(1))));
   }
 
-  private static void setCursor(final Tld registry, final CursorType cursorType, Instant value) {
+  private static void setCursor(Tld registry, CursorType cursorType, Instant value) {
     tm().transact(() -> tm().put(Cursor.createScoped(cursorType, value, registry)));
   }
 
-  private static void createTldWithEscrowEnabled(final String tld) {
+  private static void createTldWithEscrowEnabled(String tld) {
     createTld(tld);
     persistResource(Tld.get(tld).asBuilder().setEscrowEnabled(true).build());
   }

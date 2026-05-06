@@ -66,7 +66,7 @@ class ExportDomainListsActionTest {
   private final FakeClock clock = new FakeClock(Instant.parse("2020-02-02T02:02:02Z"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @BeforeEach

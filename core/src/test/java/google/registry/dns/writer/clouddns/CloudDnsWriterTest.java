@@ -71,7 +71,7 @@ import org.mockito.quality.Strictness;
 public class CloudDnsWriterTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private static final Inet4Address IPv4 = (Inet4Address) InetAddresses.forString("127.0.0.1");

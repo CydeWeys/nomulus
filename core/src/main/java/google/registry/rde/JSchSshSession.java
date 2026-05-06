@@ -38,7 +38,7 @@ import java.time.Duration;
  * @see RdeUploadAction
  * @see com.jcraft.jsch.Session
  */
-final class JSchSshSession implements Closeable {
+class JSchSshSession implements Closeable {
 
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 

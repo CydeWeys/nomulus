@@ -48,7 +48,7 @@ import org.mockito.quality.Strictness;
 public class AsyncTaskEnqueuerTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private AsyncTaskEnqueuer asyncTaskEnqueuer;

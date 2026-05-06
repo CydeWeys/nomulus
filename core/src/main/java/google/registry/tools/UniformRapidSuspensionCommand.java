@@ -13,13 +13,13 @@
 // limitations under the License.
 
 package google.registry.tools;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Sets.difference;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
 import static google.registry.util.DateTimeUtils.toInstant;
-import static java.time.ZoneOffset.UTC;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -50,7 +50,7 @@ import org.joda.time.DateTime;
 /** A command to suspend a domain for the Uniform Rapid Suspension process. */
 @Parameters(separators = " =",
     commandDescription = "Suspend a domain for Uniform Rapid Suspension.")
-final class UniformRapidSuspensionCommand extends MutatingEppToolCommand {
+class UniformRapidSuspensionCommand extends MutatingEppToolCommand {
 
   private static final ImmutableSet<String> URS_LOCKS = ImmutableSet.of(
       StatusValue.SERVER_DELETE_PROHIBITED.getXmlName(),

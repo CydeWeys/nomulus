@@ -13,12 +13,12 @@
 // limitations under the License.
 
 package google.registry.batch;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
 import static google.registry.util.DateTimeUtils.toDateTime;
 import static google.registry.util.PreconditionsUtils.checkArgumentNotNull;
-import static java.time.ZoneOffset.UTC;
 import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_OK;
 

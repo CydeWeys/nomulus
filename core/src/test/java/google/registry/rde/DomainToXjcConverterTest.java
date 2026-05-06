@@ -82,7 +82,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 public class DomainToXjcConverterTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final Instant now = Instant.parse("2014-01-01T00:00:00Z");

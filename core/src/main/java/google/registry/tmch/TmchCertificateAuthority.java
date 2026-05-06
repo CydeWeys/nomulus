@@ -83,7 +83,7 @@ public final class TmchCertificateAuthority {
           .build(
               new CacheLoader<>() {
                 @Override
-                public X509CRL load(final TmchCaMode tmchCaMode) throws GeneralSecurityException {
+                public X509CRL load(TmchCaMode tmchCaMode) throws GeneralSecurityException {
                   Optional<TmchCrl> storedCrl = TmchCrl.get();
                   String crlContents =
                       storedCrl

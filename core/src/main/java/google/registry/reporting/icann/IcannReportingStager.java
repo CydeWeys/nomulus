@@ -259,7 +259,7 @@ public class IcannReportingStager {
             tld,
             Ascii.toLowerCase(reportType.toString()),
             DateTimeFormatter.ofPattern("yyyyMM").format(yearMonth));
-    final BlobId gcsFilename =
+    BlobId gcsFilename =
         BlobId.of(reportingBucket, String.format("%s/%s", subdir, reportFilename));
     gcsUtils.createFromBytes(gcsFilename, reportBytes);
     logger.atInfo().log("Wrote %d bytes to file location '%s'.", reportBytes.length, gcsFilename);
@@ -268,7 +268,7 @@ public class IcannReportingStager {
 
   /** Creates and stores a manifest file on GCS, indicating which reports were generated. */
   void createAndUploadManifest(String subdir, ImmutableList<String> filenames) throws IOException {
-    final BlobId gcsFilename =
+    BlobId gcsFilename =
         BlobId.of(reportingBucket, String.format("%s/%s", subdir, MANIFEST_FILE_NAME));
     StringBuilder manifestString = new StringBuilder();
     filenames.forEach((filename) -> manifestString.append(filename).append("\n"));

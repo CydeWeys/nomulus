@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.rde;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static com.google.common.collect.ImmutableSetMultimap.toImmutableSetMultimap;
 import static google.registry.beam.BeamUtils.createJobName;
@@ -24,7 +25,6 @@ import static google.registry.xml.ValidationMode.STRICT;
 import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static jakarta.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
-import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.function.Function.identity;
 
 import com.google.api.services.dataflow.Dataflow;

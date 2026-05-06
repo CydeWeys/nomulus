@@ -44,7 +44,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 public class EscrowTaskRunnerTest {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final EscrowTask task = mock(EscrowTask.class);

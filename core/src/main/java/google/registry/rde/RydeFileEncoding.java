@@ -37,7 +37,7 @@ import org.bouncycastle.openpgp.PGPLiteralDataGenerator;
  *
  * <p>According to escrow spec, the PGP message should contain a single tar file.
  */
-final class RydeFileEncoding {
+class RydeFileEncoding {
 
   private static final int BUFFER_SIZE = 64 * 1024;
 

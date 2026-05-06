@@ -40,7 +40,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 class GenerateInvoicesActionTest extends BeamActionTestBase {
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final BillingEmailUtils emailUtils = mock(BillingEmailUtils.class);

@@ -13,10 +13,10 @@
 // limitations under the License.
 
 package google.registry.xml;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static google.registry.util.DateTimeUtils.parseInstant;
-import static java.time.ZoneOffset.UTC;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.Instant;

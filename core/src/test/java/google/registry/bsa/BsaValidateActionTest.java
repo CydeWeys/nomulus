@@ -80,7 +80,7 @@ public class BsaValidateActionTest {
   FakeClock fakeClock = new FakeClock(Instant.parse("2023-11-09T02:08:57.880Z"));
 
   @RegisterExtension
-  final JpaIntegrationWithCoverageExtension jpa =
+  JpaIntegrationWithCoverageExtension jpa =
       new JpaTestExtensions.Builder().withClock(fakeClock).buildIntegrationWithCoverageExtension();
 
   @Mock GmailClient gmailClient;

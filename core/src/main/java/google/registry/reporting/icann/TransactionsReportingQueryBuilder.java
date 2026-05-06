@@ -13,11 +13,11 @@
 // limitations under the License.
 
 package google.registry.reporting.icann;
+import static java.time.ZoneOffset.UTC;
 
 import static google.registry.reporting.icann.IcannReportingModule.ICANN_REPORTING_DATA_SET;
 import static google.registry.reporting.icann.QueryBuilderUtils.getQueryFromFile;
 import static google.registry.reporting.icann.QueryBuilderUtils.getTableName;
-import static java.time.ZoneOffset.UTC;
 
 import com.google.common.collect.ImmutableMap;
 import google.registry.config.RegistryConfig.Config;
@@ -34,7 +34,7 @@ import java.time.format.DateTimeFormatter;
  */
 public final class TransactionsReportingQueryBuilder implements QueryBuilder {
 
-  final String projectId;
+  String projectId;
   private final String icannReportingDataSet;
 
   @Inject

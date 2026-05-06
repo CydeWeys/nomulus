@@ -13,11 +13,11 @@
 // limitations under the License.
 
 package google.registry.webdriver;
+import static java.time.temporal.ChronoUnit.MILLIS;
 
 import static com.google.common.truth.Truth.assertThat;
 import static google.registry.server.Fixture.BASIC;
 import static google.registry.testing.DatabaseHelper.persistResource;
-import static java.time.temporal.ChronoUnit.MILLIS;
 
 import com.google.common.collect.ImmutableMap;
 import google.registry.model.console.GlobalRole;
@@ -62,11 +62,11 @@ public class ConsoleScreenshotTest {
   static final DockerWebDriverExtension webDriverProvider = new DockerWebDriverExtension();
 
   @RegisterExtension
-  final WebDriverPlusScreenDifferExtension driver =
+  WebDriverPlusScreenDifferExtension driver =
       new WebDriverPlusScreenDifferExtension(webDriverProvider::getWebDriver);
 
   @RegisterExtension
-  final TestServerExtension server =
+  TestServerExtension server =
       new TestServerExtension.Builder()
           .setRunfiles(RegistryTestServer.RUNFILES)
           .setRoutes(RegistryTestServer.ROUTES)

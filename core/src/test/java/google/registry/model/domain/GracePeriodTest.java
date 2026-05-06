@@ -13,9 +13,9 @@
 // limitations under the License.
 
 package google.registry.model.domain;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static com.google.common.truth.Truth.assertThat;
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import google.registry.model.billing.BillingBase.Reason;
@@ -40,7 +40,7 @@ public class GracePeriodTest {
   private final FakeClock fakeClock = new FakeClock(Instant.parse("2024-01-01T00:00:00Z"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(fakeClock).buildIntegrationTestExtension();
 
   private final Instant now = fakeClock.now();

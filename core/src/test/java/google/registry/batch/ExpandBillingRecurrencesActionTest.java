@@ -53,7 +53,7 @@ public class ExpandBillingRecurrencesActionTest extends BeamActionTestBase {
       ArgumentCaptor.forClass(LaunchFlexTemplateRequest.class);
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @BeforeEach

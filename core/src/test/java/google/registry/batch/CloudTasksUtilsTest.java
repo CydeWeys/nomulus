@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package google.registry.batch;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 import static com.google.common.truth.Truth.assertThat;
 import static google.registry.request.Action.Method.GET;
@@ -253,7 +254,7 @@ public class CloudTasksUtilsTest {
         .isEqualTo("https://backend.registry.test/the/path?key1=val1&key2=val2&key1=val3");
     verifyOidcToken(task);
     assertThat(Instant.ofEpochSecond(task.getScheduleTime().getSeconds()))
-        .isEqualTo(Instant.ofEpochMilli(clock.now().plus(Duration.ofMinutes(10)).toEpochMilli()));
+        .isEqualTo(clock.now().plus(Duration.ofMinutes(10)).truncatedTo(SECONDS));
   }
 
   @Test

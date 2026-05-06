@@ -48,7 +48,7 @@ public class RefreshDnsForAllDomainsActionTest {
   private final FakeResponse response = new FakeResponse();
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @BeforeEach

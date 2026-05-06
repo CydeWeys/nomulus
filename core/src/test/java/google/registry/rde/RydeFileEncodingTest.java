@@ -25,7 +25,7 @@ import java.time.Instant;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link RydeFileEncoding}. */
-final class RydeFileEncodingTest {
+class RydeFileEncodingTest {
 
   @Test
   void testEncodeDecode() throws Exception {

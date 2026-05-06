@@ -13,9 +13,9 @@
 // limitations under the License.
 
 package google.registry.rde;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
-import static java.time.temporal.ChronoUnit.DAYS;
 
 import com.google.common.flogger.FluentLogger;
 import google.registry.model.common.Cursor;
@@ -81,11 +81,11 @@ class EscrowTaskRunner {
    * @param interval how far to advance the cursor (e.g. a day for RDE, a week for BRDA)
    */
   void lockRunAndRollForward(
-      final EscrowTask task,
-      final Tld tld,
+      EscrowTask task,
+      Tld tld,
       Duration timeout,
-      final CursorType cursorType,
-      final Duration interval) {
+      CursorType cursorType,
+      Duration interval) {
     Callable<Void> lockRunner =
         () -> {
           logger.atInfo().log("Performing escrow for TLD '%s'.", tld.getTld());

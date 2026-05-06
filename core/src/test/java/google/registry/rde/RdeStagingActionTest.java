@@ -51,7 +51,7 @@ public class RdeStagingActionTest extends BeamActionTestBase {
   private final RdeStagingAction action = new RdeStagingAction();
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @BeforeEach
@@ -258,7 +258,7 @@ public class RdeStagingActionTest extends BeamActionTestBase {
         .launch(eq("projectId"), eq("jobRegion"), any(LaunchFlexTemplateRequest.class));
   }
 
-  private static void createTldWithEscrowEnabled(final String tld) {
+  private static void createTldWithEscrowEnabled(String tld) {
     createTld(tld);
     persistResource(Tld.get(tld).asBuilder().setEscrowEnabled(true).build());
   }

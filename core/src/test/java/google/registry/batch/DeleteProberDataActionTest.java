@@ -68,11 +68,11 @@ class DeleteProberDataActionTest {
   private final FakeClock clock = new FakeClock(Instant.parse("2021-01-01T00:00:00Z"));
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @RegisterExtension
-  final SystemPropertyExtension systemPropertyExtension = new SystemPropertyExtension();
+  SystemPropertyExtension systemPropertyExtension = new SystemPropertyExtension();
 
   private DeleteProberDataAction action;
 

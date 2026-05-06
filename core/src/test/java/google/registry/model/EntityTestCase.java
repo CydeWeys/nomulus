@@ -41,12 +41,12 @@ public abstract class EntityTestCase {
 
   @Order(Order.DEFAULT)
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().withClock(fakeClock).buildIntegrationTestExtension();
 
   @Order(Order.DEFAULT + 1)
   @RegisterExtension
-  final JpaEntityCoverageExtension coverage;
+  JpaEntityCoverageExtension coverage;
 
   protected EntityTestCase() {
     this(JpaEntityCoverageCheck.DISABLED);

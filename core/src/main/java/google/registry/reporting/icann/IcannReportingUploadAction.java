@@ -13,12 +13,12 @@
 // limitations under the License.
 
 package google.registry.reporting.icann;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8;
 import static google.registry.persistence.transaction.TransactionManagerFactory.tm;
 import static google.registry.request.Action.Method.POST;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
-import static java.time.ZoneOffset.UTC;
 
 import com.google.cloud.storage.BlobId;
 import com.google.common.collect.ImmutableMap;
@@ -146,7 +146,7 @@ public final class IcannReportingUploadAction implements Runnable {
             cursorTimeMinusMonth.atZone(UTC).getYear(),
             cursorTimeMinusMonth.atZone(UTC).getMonthValue());
     String filename = getFileName(cursorType, cursorTime, tldStr);
-    final BlobId gcsFilename =
+    BlobId gcsFilename =
         BlobId.of(reportingBucket, String.format("%s/%s", reportSubdir, filename));
     logger.atInfo().log("Reading ICANN report %s from bucket '%s'.", filename, reportingBucket);
     // Check that the report exists
@@ -171,7 +171,7 @@ public final class IcannReportingUploadAction implements Runnable {
       success =
           retrier.callWithRetry(
               () -> {
-                final byte[] payload = readBytesFromGcs(gcsFilename);
+                byte[] payload = readBytesFromGcs(gcsFilename);
                 return icannReporter.send(payload, filename);
               },
               IcannReportingUploadAction::isUploadFailureRetryable);

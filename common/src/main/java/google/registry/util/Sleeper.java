@@ -14,6 +14,8 @@
 
 package google.registry.util;
 
+import static google.registry.util.DateTimeUtils.toJodaDuration;
+
 import java.time.Duration;
 import javax.annotation.concurrent.ThreadSafe;
 import org.joda.time.ReadableDuration;
@@ -61,7 +63,7 @@ public interface Sleeper {
    * @see com.google.common.util.concurrent.Uninterruptibles#sleepUninterruptibly
    */
   default void sleepUninterruptibly(Duration duration) {
-    sleepUninterruptibly(DateTimeUtils.toJodaDuration(duration));
+    sleepUninterruptibly(toJodaDuration(duration));
   }
 
   /**

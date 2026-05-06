@@ -70,7 +70,7 @@ class SendExpiringCertificateNotificationEmailActionTest {
   private static final String EXPIRATION_WARNING_EMAIL_SUBJECT_TEXT = "Expiration Warning Email";
 
   @RegisterExtension
-  final JpaIntegrationTestExtension jpa =
+  JpaIntegrationTestExtension jpa =
       new JpaTestExtensions.Builder().buildIntegrationTestExtension();
 
   private final FakeClock clock = new FakeClock(DateTime.parse("2021-05-24T20:21:22Z"));

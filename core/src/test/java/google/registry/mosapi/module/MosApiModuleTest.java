@@ -13,10 +13,10 @@
 // limitations under the License.
 
 package google.registry.mosapi.module;
+import static java.time.ZoneOffset.UTC;
 
 import static com.google.common.truth.Truth.assertThat;
 import static google.registry.util.DateTimeUtils.plusYears;
-import static java.time.ZoneOffset.UTC;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;

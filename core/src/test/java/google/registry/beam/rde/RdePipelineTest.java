@@ -149,11 +149,11 @@ public class RdePipelineTest {
       PipelineOptionsFactory.create().as(RdePipelineOptions.class);
 
   @RegisterExtension
-  final JpaIntegrationTestExtension database =
+  JpaIntegrationTestExtension database =
       new JpaTestExtensions.Builder().withClock(clock).buildIntegrationTestExtension();
 
   @RegisterExtension
-  final TestPipelineExtension pipeline =
+  TestPipelineExtension pipeline =
       TestPipelineExtension.fromOptions(options).enableAbandonedNodeEnforcement(true);
 
   private RdePipeline rdePipeline;
